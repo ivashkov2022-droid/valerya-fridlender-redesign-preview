@@ -1,0 +1,66 @@
+ErrorDocument 403 /404.html
+ErrorDocument 404 /404.html
+
+DirectoryIndex page61140643.html
+
+RewriteEngine On
+
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteRule ^(.*)$ https://valerya-fridlender\.ru/$1 [R=301,L]
+
+RewriteCond %{HTTP:X-Forwarded-Proto} =https
+RewriteCond %{HTTP_HOST} ^www\.valerya-fridlender.ru [NC]
+RewriteRule ^(.*)$ https://valerya-fridlender\.ru/$1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} /robots.txt
+RewriteCond "%{DOCUMENT_ROOT}/robots_%{HTTP_HOST}.txt" -f
+RewriteRule ^(.*)$ robots_%{HTTP_HOST}.txt [NC,L]
+RewriteRule ^storyone$ page60743599.html [NC]
+RewriteRule ^storyone/$ page60743599.html [NC]
+
+RewriteRule ^storytwo$ page60743735.html [NC]
+RewriteRule ^storytwo/$ page60743735.html [NC]
+
+RewriteRule ^storythree$ page60743815.html [NC]
+RewriteRule ^storythree/$ page60743815.html [NC]
+
+RewriteRule ^storyfour$ page60744055.html [NC]
+RewriteRule ^storyfour/$ page60744055.html [NC]
+
+RewriteRule ^storyfive$ page60744079.html [NC]
+RewriteRule ^storyfive/$ page60744079.html [NC]
+
+RewriteRule ^storysix$ page60744097.html [NC]
+RewriteRule ^storysix/$ page60744097.html [NC]
+
+RewriteRule ^emdr_method$ page60745125.html [NC]
+RewriteRule ^emdr_method/$ page60745125.html [NC]
+
+RewriteRule ^ifs-therapy$ page60745107.html [NC]
+RewriteRule ^ifs-therapy/$ page60745107.html [NC]
+
+RewriteRule ^imtt_method$ page60745131.html [NC]
+RewriteRule ^imtt_method/$ page60745131.html [NC]
+
+RewriteRule ^check-lists$ page60828957.html [NC]
+RewriteRule ^check-lists/$ page60828957.html [NC]
+
+RewriteRule ^check-list-1$ page60765633.html [NC]
+RewriteRule ^check-list-1/$ page60765633.html [NC]
+
+RewriteRule ^check-list-2$ page60830187.html [NC]
+RewriteRule ^check-list-2/$ page60830187.html [NC]
+
+RewriteRule ^check-list-3$ page60830221.html [NC]
+RewriteRule ^check-list-3/$ page60830221.html [NC]
+
+RewriteRule ^check-list-4$ page60830241.html [NC]
+RewriteRule ^check-list-4/$ page60830241.html [NC]
+
+RewriteRule ^contact$ page60746837.html [NC]
+RewriteRule ^contact/$ page60746837.html [NC]
+
+RewriteRule ^blog$ page61113071.html [NC]
+RewriteRule ^blog/$ page61113071.html [NC]
+
+
