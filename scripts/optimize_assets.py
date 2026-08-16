@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Deduplicate and safely optimize exported site images.
+"""Deduplicate and optionally re-encode exported site images.
 
-PNG and transparency are encoded as lossless WebP. JPEG photographs are
-accepted only when the decoded result meets a high PSNR threshold and the
-result is meaningfully smaller. All references are updated before originals
-are removed, and a machine-readable report is written for verification.
+The default mode removes only byte-identical duplicates, keeping the original
+image encoding and pixels. The optional WebP mode uses lossless encoding for
+PNG/transparency and accepts photographs only after a strict quality check.
+All references are updated before originals are removed.
 """
 
 from __future__ import annotations
@@ -156,6 +156,11 @@ def main() -> None:
     parser.add_argument("--report", type=Path, default=Path("work/asset-optimization-report.json"))
     parser.add_argument("--min-psnr", type=float, default=42.0)
     parser.add_argument("--min-savings", type=float, default=0.03)
+    parser.add_argument(
+        "--webp",
+        action="store_true",
+        help="also create quality-checked WebP replacements",
+    )
     args = parser.parse_args()
 
     public_dir = args.public.resolve()
@@ -186,6 +191,9 @@ def main() -> None:
     optimized_target: dict[Path, Path] = {}
     optimized = []
     for canonical in sorted(set(canonical_for.values())):
+        if not args.webp:
+            optimized_target[canonical] = canonical
+            continue
         target = canonical.with_name(canonical.name + ".webp")
         result = encode_webp(canonical, target, args.min_psnr, args.min_savings)
         if result:
@@ -239,6 +247,7 @@ def main() -> None:
         "optimized": optimized,
         "references": reference_report,
         "minimum_psnr": args.min_psnr,
+        "webp_enabled": args.webp,
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
