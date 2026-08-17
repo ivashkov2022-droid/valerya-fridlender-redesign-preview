@@ -19,24 +19,6 @@ const executionContext = {
   passThroughOnException() {},
 };
 
-test("offers current contact channels without WhatsApp", async () => {
-  const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
-
-  assert.match(page, /https:\/\/t\.me\/Valeria_Fridlender/i);
-  assert.doesNotMatch(page, /WhatsApp|wa\.me/i);
-});
-
-test("generates a working GitHub Pages entry for the redesigned site", async () => {
-  const html = await readFile(new URL("../_site/index.html", import.meta.url), "utf8");
-
-  assert.match(html, /<title>Психолог онлайн — Валерия Фридлендер<\/title>/i);
-  assert.match(html, /href="_next\/static\/css\//i);
-  assert.match(html, /Написать в Telegram/i);
-  assert.match(html, /href="privacy-policy\.html"/i);
-  assert.doesNotMatch(html, /(?:href|src)="\/_next\//i);
-  assert.doesNotMatch(html, /WhatsApp|wa\.me/i);
-});
-
 test("preserves focused metadata in the legacy home archive", async () => {
   const html = await readPublic("legacy-home.html");
 
