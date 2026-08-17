@@ -172,6 +172,54 @@ test("requires separate consent in every public form and gates optional trackers
   assert.doesNotMatch(pages[0], /Включить аналитику и видео|Нет, спасибо/i);
 });
 
+test("redirects every form to an individual non-indexable thank-you page", async () => {
+  const thankYouByForm = {
+    form859129714: "thank-you-session.html",
+    form1022286186: "thank-you-participation.html",
+    form851582095: "thank-you-diagnostic.html",
+    form851585075: "thank-you-single-session.html",
+    form851585325: "thank-you-three-sessions.html",
+    form851585355: "thank-you-five-sessions.html",
+    form851578306: "thank-you-checklist.html",
+    form849469026: "thank-you-contact.html",
+    form846370213: "thank-you-checklist-1.html",
+    form846910234: "thank-you-checklist-2.html",
+    form846910468: "thank-you-checklist-3.html",
+    form846910570: "thank-you-checklist-4.html",
+  };
+  const formPages = await Promise.all(
+    [
+      "index.html",
+      "page61140643.html",
+      "page60765633.html",
+      "page60830187.html",
+      "page60830221.html",
+      "page60830241.html",
+    ].map(readPublic),
+  );
+  const thankYouPages = await Promise.all(Object.values(thankYouByForm).map(readPublic));
+
+  for (const [formId, filename] of Object.entries(thankYouByForm)) {
+    const placements = formPages.flatMap((html) =>
+      html.match(new RegExp(`<form\\b(?=[^>]*(?:id|name)=["']${formId}["'])[^>]*>`, "gi")) ?? [],
+    );
+    assert.ok(placements.length >= 1, `${formId} must be present`);
+    for (const form of placements) {
+      assert.match(form, new RegExp(`data-success-url=["']${filename}["']`, "i"));
+    }
+  }
+
+  for (const html of thankYouPages) {
+    assert.match(html, /<meta name="robots" content="noindex, nofollow">/i);
+    assert.match(html, /<p class="thank-you__eyebrow">Форма отправлена<\/p>/i);
+    assert.match(html, /href="\/">Вернуться на сайт<\/a>/i);
+    assert.match(html, /href="\/privacy-policy">Политика конфиденциальности<\/a>/i);
+  }
+
+  const sitemap = await readPublic("sitemap.xml");
+  assert.doesNotMatch(sitemap, /thank-you/i);
+});
+
 test("requests a fresh cookie choice after the GitHub Pages publication", async () => {
   const [script, html] = await Promise.all([
     readPublic("js/privacy-consent.js"),
