@@ -14,7 +14,7 @@ const consentText = `Я подтверждаю ${consentLink} и ознаком�
 
 const cookieBanner = `
 <div class="vf-cookie-banner" data-vf-cookie-banner hidden role="dialog" aria-label="Уведомление о cookie" aria-live="polite">
-  <p class="vf-cookie-banner__text">Сайт использует файлы cookie. <a href="/privacy-policy">Подробнее</a></p>
+  <p class="vf-cookie-banner__text">Сайт использует файлы cookie. <a href="/privacy-policy">Политика конфиденциальности</a></p>
   <div class="vf-cookie-banner__actions">
     <button class="vf-cookie-banner__button vf-cookie-banner__button--accept" type="button" data-vf-cookie-accept>Принять</button>
     <button class="vf-cookie-banner__button" type="button" data-vf-cookie-reject>Отклонить</button>
@@ -85,9 +85,9 @@ function replaceLegacyPolicyReferences(html) {
 
 function addPrivacyAssets(html) {
   if (!/\/css\/privacy-consent\.css/i.test(html)) {
-    html = html.replace("</head>", '<link rel="stylesheet" href="/css/privacy-consent.css?v=3"> </head>');
+    html = html.replace("</head>", '<link rel="stylesheet" href="/css/privacy-consent.css?v=4"> </head>');
   }
-  html = html.replace(/\/css\/privacy-consent\.css(?:\?v=\d+)?/gi, "/css/privacy-consent.css?v=3");
+  html = html.replace(/\/css\/privacy-consent\.css(?:\?v=\d+)?/gi, "/css/privacy-consent.css?v=4");
   if (!/\/js\/privacy-consent\.js/i.test(html)) {
     html = html.replace("</head>", '<script src="/js/privacy-consent.js?v=3"></script> </head>');
   }
@@ -103,7 +103,7 @@ function simplifyCookieBanner(html) {
     .replace(/\s*<p class="vf-cookie-banner__title">[\s\S]*?<\/p>/gi, "")
     .replace(
       /<p class="vf-cookie-banner__text">[\s\S]*?<\/p>/gi,
-      '<p class="vf-cookie-banner__text">Сайт использует файлы cookie. <a href="/privacy-policy">Подробнее</a></p>',
+      '<p class="vf-cookie-banner__text">Сайт использует файлы cookie. <a href="/privacy-policy">Политика конфиденциальности</a></p>',
     )
     .replace(
       /(<button class="vf-cookie-banner__button vf-cookie-banner__button--accept"[^>]*>)[\s\S]*?<\/button>/gi,
