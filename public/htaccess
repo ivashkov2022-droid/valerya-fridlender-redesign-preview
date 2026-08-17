@@ -15,6 +15,10 @@ RewriteRule ^(.*)$ https://valerya-fridlender\.ru/$1 [R=301,L]
 RewriteCond %{REQUEST_FILENAME} /robots.txt
 RewriteCond "%{DOCUMENT_ROOT}/robots_%{HTTP_HOST}.txt" -f
 RewriteRule ^(.*)$ robots_%{HTTP_HOST}.txt [NC,L]
+
+# Consolidate duplicate and legacy home-page URLs.
+RewriteRule ^(?:index|index\.html|page59763139|page59763139\.html|page61140643|page61140643\.html)$ / [R=301,L,NC]
+
 RewriteRule ^storyone$ page60743599.html [NC]
 RewriteRule ^storyone/$ page60743599.html [NC]
 
@@ -62,5 +66,4 @@ RewriteRule ^contact/$ page60746837.html [NC]
 
 RewriteRule ^blog$ page61113071.html [NC]
 RewriteRule ^blog/$ page61113071.html [NC]
-
 
