@@ -40,9 +40,10 @@ test("loads the first screen immediately and hides only the expired promotion", 
 
   assert.match(html, /rel="preload" as="image" href="\/images\/hero-valeria\.webp"/i);
   assert.match(html, /src='images\/hero-valeria\.webp' loading='eager' fetchpriority='high'/i);
-  assert.match(html, /href="\/css\/site-overrides\.css"/i);
+  assert.match(html, /href="\/css\/site-overrides\.css\?v=2"/i);
   assert.match(overrides, /#rec1022137526[\s\S]*#rec1022300811[\s\S]*display:\s*none\s*!important/i);
   assert.match(overrides, /\.t-records[\s\S]*opacity:\s*1\s*!important/i);
+  assert.match(overrides, /\.t396__artboard\.rendering \.tn-elem[\s\S]*visibility:\s*visible\s*!important/i);
   assert.doesNotMatch(html, /Запись открыта до 15 августа|id="rec1022137526"|id="rec1022300811"/i);
   assert.match(html, /data-vf-cookie-banner/i);
 });
@@ -162,10 +163,14 @@ test("requires separate consent in every public form and gates optional trackers
 });
 
 test("requests a fresh cookie choice after the GitHub Pages publication", async () => {
-  const script = await readPublic("js/privacy-consent.js");
+  const [script, html] = await Promise.all([
+    readPublic("js/privacy-consent.js"),
+    readPublic("index.html"),
+  ]);
 
   assert.match(script, /vf_cookie_consent_v2/);
   assert.doesNotMatch(script, /vf_cookie_consent_v1/);
+  assert.match(html, /src="\/js\/privacy-consent\.js\?v=2"/i);
 });
 
 test("serves clean legal-document routes", async () => {

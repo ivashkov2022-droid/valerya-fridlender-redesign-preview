@@ -18,7 +18,12 @@
   background-image: url("../images/tild3935-3361-4935-b936-353131646335__432_1_02_1_03_008_02.jpg") !important;
 }
 
+#rec849315160 .t396__artboard.rendering .tn-elem,
+#rec849315160 .t396__artboard.rendered .tn-elem,
 #rec849315160 .tn-elem,
 #rec849315160 .tn-atom {
-  animation-delay: 0s !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  animation: none !important;
+  transition: none !important;
 }

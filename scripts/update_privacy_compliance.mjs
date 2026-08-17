@@ -88,8 +88,9 @@ function addPrivacyAssets(html) {
     html = html.replace("</head>", '<link rel="stylesheet" href="/css/privacy-consent.css"> </head>');
   }
   if (!/\/js\/privacy-consent\.js/i.test(html)) {
-    html = html.replace("</head>", '<script src="/js/privacy-consent.js"></script> </head>');
+    html = html.replace("</head>", '<script src="/js/privacy-consent.js?v=2"></script> </head>');
   }
+  html = html.replace(/\/js\/privacy-consent\.js(?:\?v=\d+)?/gi, "/js/privacy-consent.js?v=2");
   if (!/data-vf-cookie-banner/i.test(html)) {
     html = html.replace("</body>", `${cookieBanner}\n</body>`);
   }
