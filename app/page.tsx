@@ -192,7 +192,7 @@ export default function Home() {
           <p className="eyebrow eyebrow-light">Запись на сессию</p>
           <h2>Опишите запрос.<br /><em>Я отвечу лично.</em></h2>
           <p>В первом сообщении достаточно кратко написать, что происходит. Я отвечу на вопросы и предложу время для встречи.</p>
-          <div><a className="button button-light" href="https://t.me/Valeria_Fridlender">Написать в Telegram</a><a className="contact-link" href="https://wa.me/79111284444">WhatsApp ⟶</a></div>
+          <div><a className="button button-light" href="https://t.me/Valeria_Fridlender">Написать в Telegram</a></div>
         </div>
       </section>
 
