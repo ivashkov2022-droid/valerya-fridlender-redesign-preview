@@ -158,6 +158,7 @@ test("requires separate consent in every public form and gates optional trackers
   assert.match(pages[0], /data-vf-consent="analytics"/i);
   assert.match(pages[0], /data-youtube-consent-id=/i);
   assert.match(pages[0], /data-vf-cookie-banner/i);
+  assert.match(pages[0], /href="\/css\/privacy-consent\.css\?v=2"/i);
   assert.match(pages[0], /Сайт использует файлы cookie/i);
   assert.match(pages[0], /data-vf-cookie-accept>Принять<\/button>/i);
   assert.match(pages[0], /data-vf-cookie-reject>Отклонить<\/button>/i);
