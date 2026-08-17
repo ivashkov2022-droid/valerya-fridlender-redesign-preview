@@ -192,7 +192,7 @@ export default function Home() {
           <p className="eyebrow eyebrow-light">Готовы начать?</p>
           <h2>Давайте найдём точку,<br /><em>с которой станет легче.</em></h2>
           <p>Коротко расскажите, что вас беспокоит, и мы подберём время для знакомства.</p>
-          <div><a className="button button-light" href="https://t.me/Valeria_Fridlender">Написать в Telegram</a><a className="contact-link" href="https://wa.me/79111284444">WhatsApp ⟶</a></div>
+          <div><a className="button button-light" href="https://t.me/Valeria_Fridlender">Написать в Telegram</a></div>
         </div>
       </section>
 

@@ -25,6 +25,7 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
+main { overflow-x: clip; }
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 h1, h2, h3, p { margin-top: 0; }
@@ -390,7 +391,7 @@ h1, h2, h3, p { margin-top: 0; }
 
 .faq-section { padding-top: 98px; padding-bottom: 105px; display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 80px; }
 .faq-title h2 { font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(56px, 6vw, 82px); font-weight: 400; line-height: 0.9; text-transform: uppercase; }
-.faq-list { border-top: 1px solid var(--line); }
+.faq-list { overflow-x: hidden; border-top: 1px solid var(--line); }
 .faq-list details { border-bottom: 1px solid var(--line); }
 .faq-list summary { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 20px; cursor: pointer; list-style: none; }
 .faq-list summary::-webkit-details-marker { display: none; }
@@ -414,7 +415,6 @@ h1, h2, h3, p { margin-top: 0; }
 .contact-inner h2 em { font-weight: 400; text-transform: none; }
 .contact-inner > p:not(.eyebrow) { max-width: 560px; margin-bottom: 28px; }
 .contact-inner > div { display: flex; align-items: center; gap: 28px; }
-.contact-link { padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.65); font-size: 12px; text-transform: uppercase; }
 
 .site-footer { padding: 72px 38px 26px; background: white; }
 .footer-grid {
@@ -627,6 +627,14 @@ h1, h2, h3, p { margin-top: 0; }
   .steps-grid article + article { border-left: 0; border-top: 1px solid var(--line); }
   .steps-grid h3 { margin-top: 20px; }
   .formats-inner { padding-top: 70px; padding-bottom: 75px; grid-template-columns: 1fr; gap: 48px; }
+  .formats-heading,
+  .price-list,
+  .section-heading,
+  .service-grid,
+  .service-card,
+  .about-copy,
+  .faq-list,
+  .faq-list summary span { min-width: 0; }
   .faq-section { padding-top: 72px; padding-bottom: 77px; grid-template-columns: 1fr; gap: 38px; }
   .contact-section { min-height: 720px; background-position: 52% center; align-items: flex-end; }
   .contact-shade { background: linear-gradient(0deg, rgba(16,24,47,0.94) 0%, rgba(16,24,47,0.72) 48%, rgba(16,24,47,0.12) 76%); }
@@ -644,17 +652,20 @@ h1, h2, h3, p { margin-top: 0; }
   .hero-label { font-size: 9px; }
   .hero-script { max-width: 330px; }
   .intro-photo { min-height: 320px; }
-  .intro-copy h2 { font-size: 43px; }
-  .section-heading h2 { font-size: 43px; }
+  .intro-copy h2 { font-size: clamp(35px, 11vw, 43px); }
+  .section-heading h2 { font-size: clamp(35px, 11vw, 43px); }
   .service-grid { grid-template-columns: 1fr; gap: 15px; }
   .service-card > img { height: 255px; }
   .service-card > div { min-height: 0; padding: 24px 22px 25px; }
-  .service-card h3 { font-size: 38px; }
+  .service-card h3 { font-size: clamp(31px, 10vw, 38px); }
   .promise-band h2 { font-size: 45px; }
-  .methods-intro h2 { font-size: 53px; }
+  .methods-intro h2 { font-size: clamp(43px, 14vw, 53px); }
+  .method-list h3 { font-size: clamp(37px, 12vw, 48px); }
   .method-list article { grid-template-columns: 35px 1fr; gap: 10px; }
   .about-photo { min-height: 500px; }
-  .about-copy h2 { font-size: 67px; }
+  .about-copy h2 { font-size: clamp(48px, 16vw, 67px); }
+  .formats-heading h2,
+  .faq-title h2 { font-size: clamp(40px, 12vw, 48px); }
   .price-list article { grid-template-columns: 1fr auto; }
   .price-list article small { grid-row: 2; }
   .price-list article strong { grid-row: 1 / span 2; grid-column: 2; }
@@ -663,6 +674,12 @@ h1, h2, h3, p { margin-top: 0; }
   .footer-grid { grid-template-columns: 1fr; gap: 40px; padding-bottom: 42px; }
   .footer-bottom { align-items: flex-start; flex-direction: column; }
   .footer-bottom > div { flex-direction: column; gap: 8px; }
+}
+
+@media (max-width: 380px) {
+  .price-list article { grid-template-columns: 1fr; gap: 7px; }
+  .price-list article small,
+  .price-list article strong { grid-row: auto; grid-column: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {

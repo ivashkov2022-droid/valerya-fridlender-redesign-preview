@@ -19,6 +19,13 @@ const executionContext = {
   passThroughOnException() {},
 };
 
+test("offers current contact channels without WhatsApp", async () => {
+  const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+
+  assert.match(page, /https:\/\/t\.me\/Valeria_Fridlender/i);
+  assert.doesNotMatch(page, /WhatsApp|wa\.me/i);
+});
+
 test("preserves focused metadata in the legacy home archive", async () => {
   const html = await readPublic("legacy-home.html");
 
