@@ -44,6 +44,20 @@ for (const relativeFile of sourcePages) {
       /\/css\/site-overrides\.css(?:\?v=\d+)?/gi,
       "/css/site-overrides.css?v=2",
     );
+    after = after.replace(
+      /js\/tilda-fonts\.min\.js(?:\?v=\d+)?/gi,
+      "js/tilda-fonts.min.js?v=2",
+    );
+    after = after.replace(
+      /(fonts\.googleapis\.com\/css2\?family=Oswald[^"']*?)(?:&display=[^&"']+)?(["'])/gi,
+      "$1&display=swap$2",
+    );
+    if (!/rel="preconnect" href="https:\/\/fonts\.googleapis\.com"/i.test(after)) {
+      after = after.replace(
+        '<link rel="preconnect" href="https://fonts.gstatic.com">',
+        '<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
+      );
+    }
   }
 
   if (after !== before) await writeFile(file, after, "utf8");

@@ -85,9 +85,9 @@ function replaceLegacyPolicyReferences(html) {
 
 function addPrivacyAssets(html) {
   if (!/\/css\/privacy-consent\.css/i.test(html)) {
-    html = html.replace("</head>", '<link rel="stylesheet" href="/css/privacy-consent.css?v=2"> </head>');
+    html = html.replace("</head>", '<link rel="stylesheet" href="/css/privacy-consent.css?v=3"> </head>');
   }
-  html = html.replace(/\/css\/privacy-consent\.css(?:\?v=\d+)?/gi, "/css/privacy-consent.css?v=2");
+  html = html.replace(/\/css\/privacy-consent\.css(?:\?v=\d+)?/gi, "/css/privacy-consent.css?v=3");
   if (!/\/js\/privacy-consent\.js/i.test(html)) {
     html = html.replace("</head>", '<script src="/js/privacy-consent.js?v=3"></script> </head>');
   }

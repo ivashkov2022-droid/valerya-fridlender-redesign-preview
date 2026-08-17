@@ -33,9 +33,10 @@ test("publishes focused metadata for the home page", async () => {
 });
 
 test("loads the first screen immediately and hides only the expired promotion", async () => {
-  const [html, overrides] = await Promise.all([
+  const [html, overrides, fontLoader] = await Promise.all([
     readPublic("index.html"),
     readPublic("css/site-overrides.css"),
+    readPublic("js/tilda-fonts.min.js"),
   ]);
 
   assert.match(html, /rel="preload" as="image" href="\/images\/hero-valeria\.webp"/i);
@@ -44,6 +45,10 @@ test("loads the first screen immediately and hides only the expired promotion", 
   assert.match(overrides, /#rec1022137526[\s\S]*#rec1022300811[\s\S]*display:\s*none\s*!important/i);
   assert.match(overrides, /\.t-records[\s\S]*opacity:\s*1\s*!important/i);
   assert.match(overrides, /\.t396__artboard\.rendering \.tn-elem[\s\S]*visibility:\s*visible\s*!important/i);
+  assert.match(html, /src="js\/tilda-fonts\.min\.js\?v=2"/i);
+  assert.match(html, /fonts\.googleapis\.com[^"']*&display=swap/i);
+  assert.match(fontLoader, /window\.tildafontsswap\s*=\s*"y"/i);
+  assert.doesNotMatch(fontLoader, /body \*\{color:transparent/i);
   assert.doesNotMatch(html, /Запись открыта до 15 августа|id="rec1022137526"|id="rec1022300811"/i);
   assert.match(html, /data-vf-cookie-banner/i);
 });
@@ -158,7 +163,7 @@ test("requires separate consent in every public form and gates optional trackers
   assert.match(pages[0], /data-vf-consent="analytics"/i);
   assert.match(pages[0], /data-youtube-consent-id=/i);
   assert.match(pages[0], /data-vf-cookie-banner/i);
-  assert.match(pages[0], /href="\/css\/privacy-consent\.css\?v=2"/i);
+  assert.match(pages[0], /href="\/css\/privacy-consent\.css\?v=3"/i);
   assert.match(pages[0], /Сайт использует файлы cookie/i);
   assert.match(pages[0], /data-vf-cookie-accept>Принять<\/button>/i);
   assert.match(pages[0], /data-vf-cookie-reject>Отклонить<\/button>/i);
