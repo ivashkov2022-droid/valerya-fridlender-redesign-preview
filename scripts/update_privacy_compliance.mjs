@@ -14,11 +14,10 @@ const consentText = `Я подтверждаю ${consentLink} и ознаком�
 
 const cookieBanner = `
 <div class="vf-cookie-banner" data-vf-cookie-banner hidden role="dialog" aria-label="Настройки cookies" aria-live="polite">
-  <p class="vf-cookie-banner__title">Настройки приватности</p>
-  <p class="vf-cookie-banner__text">Необходимые функции работают всегда. Яндекс.Метрика и внешнее видео включатся только с вашего разрешения. Подробнее — в <a href="/privacy-policy#cookies">политике</a>.</p>
+  <p class="vf-cookie-banner__text">Включить аналитику и видео?</p>
   <div class="vf-cookie-banner__actions">
-    <button class="vf-cookie-banner__button vf-cookie-banner__button--accept" type="button" data-vf-cookie-accept>Разрешить аналитику и видео</button>
-    <button class="vf-cookie-banner__button" type="button" data-vf-cookie-reject>Только необходимые</button>
+    <button class="vf-cookie-banner__button vf-cookie-banner__button--accept" type="button" data-vf-cookie-accept>Разрешить</button>
+    <button class="vf-cookie-banner__button" type="button" data-vf-cookie-reject>Нет, спасибо</button>
   </div>
 </div>`;
 
@@ -97,6 +96,23 @@ function addPrivacyAssets(html) {
   return html;
 }
 
+function simplifyCookieBanner(html) {
+  return html
+    .replace(/\s*<p class="vf-cookie-banner__title">[\s\S]*?<\/p>/gi, "")
+    .replace(
+      /<p class="vf-cookie-banner__text">[\s\S]*?<\/p>/gi,
+      '<p class="vf-cookie-banner__text">Включить аналитику и видео?</p>',
+    )
+    .replace(
+      /(<button class="vf-cookie-banner__button vf-cookie-banner__button--accept"[^>]*>)[\s\S]*?<\/button>/gi,
+      "$1Разрешить</button>",
+    )
+    .replace(
+      /(<button class="vf-cookie-banner__button"[^>]*data-vf-cookie-reject[^>]*>)[\s\S]*?<\/button>/gi,
+      "$1Нет, спасибо</button>",
+    );
+}
+
 function tidyLineEndings(html) {
   return html.replace(/[ \t]+(?=\r?$)/gm, "");
 }
@@ -112,6 +128,7 @@ for (const filename of topLevelHtml) {
   after = updateForms(after);
   after = gateOptionalServices(after);
   after = addPrivacyAssets(after);
+  after = simplifyCookieBanner(after);
   after = tidyLineEndings(after);
   if (after !== before) {
     await writeFile(file, after, "utf8");
