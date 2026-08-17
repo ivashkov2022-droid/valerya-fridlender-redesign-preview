@@ -1,3 +1,5 @@
+import FontLab from "./font-lab";
+
 const trustPoints = [
   { title: "Практика онлайн", text: "Сессии из любой страны и очные встречи в Санкт-Петербурге" },
   { title: "Доказательный подход", text: "IFS, EMDR и ImTT — методы, которые подбираются под ваш запрос" },
@@ -235,6 +237,7 @@ export default function Home() {
           <div><a href="/privacy-policy">Политика конфиденциальности</a><a href="/personal-data-consent">Согласие на обработку данных</a></div>
         </div>
       </footer>
+      <FontLab />
     </main>
   );
 }
