@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Forum&family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Manrope:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Prata&family=Vollkorn:ital,wght@0,400;0,500;1,400;1,500&display=swap");
 
 :root {
   --navy: #202e56;
@@ -9,6 +9,8 @@
   --paper: #fbfaf7;
   --white: #ffffff;
   --line: rgba(32, 46, 86, 0.24);
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Montserrat", Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -18,7 +20,7 @@ body {
   overflow-x: hidden;
   background: var(--paper);
   color: var(--navy);
-  font-family: "Montserrat", Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
@@ -465,6 +467,112 @@ h1, h2, h3, p { margin-top: 0; }
 }
 .footer-bottom > div { display: flex; flex-wrap: wrap; gap: 20px; }
 
+.brand span,
+.hero h1,
+.hero-script,
+.intro-copy h2,
+.section-heading h2,
+.section-script,
+.service-card h3,
+.promise-band h2,
+.methods-intro h2,
+.method-list h3,
+.about-copy h2,
+.about-lead,
+.steps-grid h3,
+.formats-heading h2,
+.price-list span,
+.price-list strong,
+.faq-title h2,
+.faq-list summary span,
+.contact-inner h2,
+.footer-brand span {
+  font-family: var(--font-display);
+}
+
+.font-lab {
+  position: fixed;
+  z-index: 80;
+  right: 18px;
+  bottom: 18px;
+  font-family: "Montserrat", Arial, sans-serif;
+  color: var(--navy);
+}
+.font-lab-trigger {
+  min-height: 46px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,0.75);
+  border-radius: 999px;
+  background: var(--navy);
+  color: white;
+  box-shadow: 0 12px 32px rgba(15, 25, 52, 0.24);
+  font: 600 11px/1 "Montserrat", Arial, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.font-lab-trigger span {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  text-transform: none;
+}
+.font-lab-panel {
+  position: absolute;
+  right: 0;
+  bottom: 58px;
+  width: min(390px, calc(100vw - 24px));
+  max-height: min(720px, calc(100vh - 94px));
+  padding: 22px;
+  overflow-y: auto;
+  border: 1px solid rgba(32, 46, 86, 0.16);
+  background: rgba(255,255,255,0.98);
+  box-shadow: 0 24px 70px rgba(12, 21, 44, 0.28);
+  backdrop-filter: blur(18px);
+}
+.font-lab-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.font-lab-head small { display: block; margin-bottom: 5px; font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+.font-lab-head h2 { margin: 0; font: 400 31px/0.95 "Cormorant Garamond", Georgia, serif; }
+.font-lab-head > button {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--navy);
+  font: 300 23px/1 Arial, sans-serif;
+  cursor: pointer;
+}
+.font-lab-lead { margin: 17px 0 18px; font-size: 11px; line-height: 1.55; }
+.font-lab-options { display: grid; gap: 8px; }
+.font-lab-options > button {
+  width: 100%;
+  padding: 14px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  border: 1px solid rgba(32, 46, 86, 0.17);
+  background: var(--paper);
+  color: var(--navy);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+.font-lab-options > button:hover { border-color: var(--navy); transform: translateY(-1px); }
+.font-lab-options > button.is-selected { border-color: var(--navy); background: var(--blue-light); }
+.font-option-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.font-option-top b { font: 600 10px/1.2 "Montserrat", Arial, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; }
+.font-option-top i { font: 500 8px/1.2 "Montserrat", Arial, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; }
+.font-lab-options strong { margin-top: 4px; font-size: 24px; font-weight: 400; line-height: 1.05; }
+.font-lab-options > button > span:not(.font-option-top) { font-size: 10px; line-height: 1.4; }
+.font-lab-options > button > small { margin-top: 3px; opacity: 0.72; font: 400 9px/1.45 "Montserrat", Arial, sans-serif; }
+
 @media (max-width: 1120px) {
   .site-header { grid-template-columns: 230px 1fr 176px; padding-inline: 22px; }
   .site-header nav { gap: 20px; }
@@ -525,6 +633,8 @@ h1, h2, h3, p { margin-top: 0; }
   .contact-inner { width: 100%; padding: 250px 24px 48px; }
   .site-footer { padding: 58px 22px 24px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 48px 28px; }
+  .font-lab { right: 12px; bottom: 12px; }
+  .font-lab-panel { bottom: 56px; padding: 18px; }
 }
 
 @media (max-width: 560px) {
