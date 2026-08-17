@@ -32,6 +32,21 @@ test("publishes focused metadata for the home page", async () => {
   assert.doesNotMatch(html, /для женщин|женский психолог/i);
 });
 
+test("loads the first screen immediately and hides only the expired promotion", async () => {
+  const [html, overrides] = await Promise.all([
+    readPublic("index.html"),
+    readPublic("css/site-overrides.css"),
+  ]);
+
+  assert.match(html, /rel="preload" as="image" href="\/images\/hero-valeria\.webp"/i);
+  assert.match(html, /src='images\/hero-valeria\.webp' loading='eager' fetchpriority='high'/i);
+  assert.match(html, /href="\/css\/site-overrides\.css"/i);
+  assert.match(overrides, /#rec1022137526[\s\S]*#rec1022300811[\s\S]*display:\s*none\s*!important/i);
+  assert.match(overrides, /\.t-records[\s\S]*opacity:\s*1\s*!important/i);
+  assert.doesNotMatch(html, /Запись открыта до 15 августа|id="rec1022137526"|id="rec1022300811"/i);
+  assert.match(html, /data-vf-cookie-banner/i);
+});
+
 test("keeps indexable pages unique and draft pages out of the index", async () => {
   const [story, method, blog, checklist, sitemap] = await Promise.all([
     readPublic("page60743599.html"),

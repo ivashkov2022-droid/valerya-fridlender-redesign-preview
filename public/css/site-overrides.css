@@ -1,0 +1,24 @@
+/* Hide the expired August consultation promotion while keeping the cookie notice active. */
+#rec1022137526,
+#rec1022300811 {
+  display: none !important;
+}
+
+/* The first screen must be visible immediately instead of waiting for Tilda's entrance delay. */
+#allrecords,
+.t-records,
+.t-records.t-records_animated,
+.t-records.t-records_visible {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+#rec849315160 .t396__carrier {
+  background-image: url("../images/tild3935-3361-4935-b936-353131646335__432_1_02_1_03_008_02.jpg") !important;
+}
+
+#rec849315160 .tn-elem,
+#rec849315160 .tn-atom {
+  animation-delay: 0s !important;
+}
