@@ -161,6 +161,13 @@ test("requires separate consent in every public form and gates optional trackers
   assert.match(pages[0], /data-vf-cookie-reject>Нет, спасибо<\/button>/i);
 });
 
+test("requests a fresh cookie choice after the GitHub Pages publication", async () => {
+  const script = await readPublic("js/privacy-consent.js");
+
+  assert.match(script, /vf_cookie_consent_v2/);
+  assert.doesNotMatch(script, /vf_cookie_consent_v1/);
+});
+
 test("serves clean legal-document routes", async () => {
   const worker = await loadWorker();
   const requestedPaths = [];
