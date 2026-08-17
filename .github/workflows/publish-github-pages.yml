@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.repository == 'ivashkov2022-droid/valerya-fridlender-redesign-preview'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
