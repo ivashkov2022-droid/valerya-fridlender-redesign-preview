@@ -10,7 +10,7 @@ const services = [
   {
     title: "Индивидуальная терапия",
     text: "Тревога, хроническое напряжение, жизненные кризисы и состояния, с которыми не удаётся справиться привычными способами.",
-    image: "/images/tild3266-3864-4230-a237-396466653537__5190700468546954842.jpg",
+    image: "/images/tild3830-3162-4235-b462-373165303535__img_7743.jpg",
   },
   {
     title: "Травматический опыт",
@@ -187,6 +187,15 @@ export default function Home() {
       </section>
 
       <section className="contact-section" id="contact">
+        <img
+          className="contact-photo"
+          src="/images/tild3236-3363-4432-a238-353234313366__img_7710.jpg"
+          alt=""
+          width="1680"
+          height="2100"
+          loading="eager"
+          decoding="async"
+        />
         <div className="contact-shade" aria-hidden="true" />
         <div className="contact-inner">
           <p className="eyebrow eyebrow-light">Запись на сессию</p>
