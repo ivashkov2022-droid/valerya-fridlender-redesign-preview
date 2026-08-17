@@ -1,91 +1,94 @@
 import assert from "node:assert/strict";
-import { access, readFile, readdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const developmentPreviewMeta =
-  /<meta(?=[^>]*\bname=["']codex-preview["'])(?=[^>]*\bcontent=["']development["'])[^>]*>/i;
-const templateRoot = new URL("../", import.meta.url);
-const previewRoot = new URL("../app/_sites-preview/", import.meta.url);
+const projectRoot = new URL("../", import.meta.url);
 
-async function render() {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { default: worker } = await import(workerUrl.href);
-
-  return worker.fetch(
-    new Request("http://localhost/", {
-      headers: { accept: "text/html" },
-    }),
-    {
-      ASSETS: {
-        fetch: async () => new Response("Not found", { status: 404 }),
-      },
-    },
-    {
-      waitUntil() {},
-      passThroughOnException() {},
-    },
-  );
+async function readPublic(filename) {
+  return readFile(new URL(`public/${filename}`, projectRoot), "utf8");
 }
 
-test("server-renders the starter loading skeleton", async () => {
-  const response = await render();
-  assert.equal(response.status, 200);
-  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
+async function loadWorker() {
+  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
+  return (await import(workerUrl.href)).default;
+}
 
-  const html = await response.text();
-  assert.match(html, developmentPreviewMeta);
-  assert.match(html, /<title>Your site is taking shape<\/title>/i);
-  assert.match(html, /Building your site/);
-  assert.match(html, /Your site is taking shape/);
-  assert.match(
-    html,
-    /Your first version will appear here automatically when it’s ready\./,
-  );
-  assert.doesNotMatch(html, /Codex/);
-  assert.match(html, /react-loading-skeleton/);
-  assert.match(html, /role="status"/);
+const executionContext = {
+  waitUntil() {},
+  passThroughOnException() {},
+};
+
+test("publishes focused metadata for the home page", async () => {
+  const html = await readPublic("index.html");
+
+  assert.match(html, /<html lang="ru">/i);
+  assert.match(html, /<title>Психолог онлайн — Валерия Фридлендер<\/title>/i);
+  assert.match(html, /<meta name="description" content="Онлайн-консультации психолога:/i);
+  assert.match(html, /<link rel="canonical" href="https:\/\/valerya-fridlender\.ru\/">/i);
+  assert.match(html, /<meta property="og:image" content="https:\/\/valerya-fridlender\.ru\/og\.png"/i);
+  assert.match(html, /<meta name="twitter:card" content="summary_large_image"/i);
+  assert.match(html, /<script id="seo-structured-data" type="application\/ld\+json">/i);
+  assert.doesNotMatch(html, /для женщин|женский психолог/i);
 });
 
-test("keeps the loading skeleton scoped and disposable", async () => {
-  const [preview, css, page, layout, packageJson, files] = await Promise.all([
-    readFile(new URL("SkeletonPreview.tsx", previewRoot), "utf8"),
-    readFile(new URL("preview.css", previewRoot), "utf8"),
-    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readdir(previewRoot),
+test("keeps indexable pages unique and draft pages out of the index", async () => {
+  const [story, method, blog, checklist, sitemap] = await Promise.all([
+    readPublic("page60743599.html"),
+    readPublic("page60745125.html"),
+    readPublic("page61113071.html"),
+    readPublic("page60765633.html"),
+    readPublic("sitemap.xml"),
   ]);
 
-  assert.deepEqual(files.sort(), ["SkeletonPreview.tsx", "preview.css"]);
-  assert.match(preview, /from "react-loading-skeleton"/);
-  assert.match(preview, /baseColor="#eceae7"/);
-  assert.match(preview, /highlightColor="#f9f8f6"/);
-  assert.match(preview, /duration=\{2\.8\}/);
-  assert.match(preview, /sites-skeleton-search-placeholder/);
-  assert.match(packageJson, /"react-loading-skeleton": "3\.5\.0"/);
+  assert.match(story, /<title>Внутренние конфликты: причины и способы решения<\/title>/i);
+  assert.match(story, /<h1[^>]*class=["'][^"']*t203__title/i);
+  assert.doesNotMatch(story, /name="robots" content="noindex/i);
 
-  const shellIndex = preview.indexOf('className="sites-skeleton-shell"');
-  const statusIndex = preview.indexOf('className="sites-skeleton-status"');
-  assert.ok(shellIndex >= 0 && statusIndex > shellIndex);
-  assert.match(css, /position:\s*fixed/);
-  assert.match(css, /inset:\s*0/);
-  assert.match(css, /opacity:\s*0\.52/);
-  assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.doesNotMatch(css, /#020617|canvas|pets|progress/i);
-  assert.doesNotMatch(
-    preview,
-    /loading-spinner|status-mark|status-progress|canvas|cookie|random/i,
+  assert.match(method, /<title>EMDR-терапия: работа с травматическим опытом<\/title>/i);
+  assert.match(method, /<h1[^>]*class=["'][^"']*t203__title/i);
+
+  assert.match(blog, /<meta name="robots" content="noindex, follow"/i);
+  assert.match(checklist, /<meta name="robots" content="noindex, follow"/i);
+  assert.doesNotMatch(sitemap, /blog|check-list|storythree|page59763139/i);
+  assert.match(sitemap, /storyone/);
+  assert.match(sitemap, /emdr_method/);
+});
+
+test("serves clean routes and blocks preview indexing", async () => {
+  const worker = await loadWorker();
+  let requestedPath = "";
+  const env = {
+    ASSETS: {
+      fetch: async (request) => {
+        requestedPath = new URL(request.url).pathname;
+        return new Response("article", {
+          status: 200,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        });
+      },
+    },
+  };
+
+  const response = await worker.fetch(
+    new Request("https://preview.example/storyone"),
+    env,
+    executionContext,
   );
 
-  assert.match(page, /export const metadata:\s*Metadata/);
-  assert.match(page, /"codex-preview": "development"/);
-  assert.match(page, /<SkeletonPreview \/>/);
-  assert.match(layout, /title:\s*"Starter Project"/);
-  assert.doesNotMatch(layout, /codex-preview|_sites-preview|themeColor|\bViewport\b/);
-  assert.doesNotMatch(css, /(^|\s)(html|body)\s*\{/m);
+  assert.equal(response.status, 200);
+  assert.equal(requestedPath, "/page60743599.html");
+  assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow");
+});
 
-  await assert.rejects(
-    access(new URL("public/_sites-preview", templateRoot)),
+test("redirects duplicate home-page URLs", async () => {
+  const worker = await loadWorker();
+  const response = await worker.fetch(
+    new Request("https://preview.example/page61140643.html"),
+    { ASSETS: { fetch: async () => new Response("unused") } },
+    executionContext,
   );
+
+  assert.equal(response.status, 301);
+  assert.equal(response.headers.get("location"), "https://preview.example/");
 });
