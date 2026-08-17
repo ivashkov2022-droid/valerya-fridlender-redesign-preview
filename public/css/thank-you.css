@@ -1,0 +1,116 @@
+:root {
+  color-scheme: dark;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(205, 141, 105, 0.28), transparent 34%),
+    radial-gradient(circle at 14% 84%, rgba(17, 210, 121, 0.13), transparent 32%),
+    linear-gradient(145deg, #1a212d 0%, #0e0e1f 56%, #090b1f 100%);
+}
+
+.thank-you {
+  width: min(760px, 100%);
+  padding: clamp(28px, 6vw, 64px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 32px;
+  background: rgba(5, 2, 21, 0.58);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(12px);
+}
+
+.thank-you__brand {
+  margin: 0 0 52px;
+  color: #cd8d69;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.thank-you__eyebrow {
+  margin: 0 0 14px;
+  color: #11d279;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.thank-you h1 {
+  max-width: 650px;
+  margin: 0;
+  font-size: clamp(38px, 8vw, 72px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+
+.thank-you__text {
+  max-width: 590px;
+  margin: 28px 0 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: clamp(16px, 2.2vw, 19px);
+  line-height: 1.55;
+}
+
+.thank-you__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.thank-you__button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  border: 1px solid #cd8d69;
+  border-radius: 999px;
+  color: #0e0e1f;
+  background: #cd8d69;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.thank-you__policy {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13px;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 540px) {
+  body {
+    padding: 12px;
+  }
+
+  .thank-you {
+    padding: 28px 22px 34px;
+    border-radius: 22px;
+  }
+
+  .thank-you__brand {
+    margin-bottom: 42px;
+  }
+}

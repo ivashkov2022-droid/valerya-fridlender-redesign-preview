@@ -13,11 +13,11 @@ const consentLink =
 const consentText = `Я подтверждаю ${consentLink} и ознакомление с ${policyLink}.`;
 
 const cookieBanner = `
-<div class="vf-cookie-banner" data-vf-cookie-banner hidden role="dialog" aria-label="Настройки cookies" aria-live="polite">
-  <p class="vf-cookie-banner__text">Включить аналитику и видео?</p>
+<div class="vf-cookie-banner" data-vf-cookie-banner hidden role="dialog" aria-label="Уведомление о cookie" aria-live="polite">
+  <p class="vf-cookie-banner__text">Сайт использует файлы cookie. <a href="/privacy-policy">Политика конфиденциальности</a></p>
   <div class="vf-cookie-banner__actions">
-    <button class="vf-cookie-banner__button vf-cookie-banner__button--accept" type="button" data-vf-cookie-accept>Разрешить</button>
-    <button class="vf-cookie-banner__button" type="button" data-vf-cookie-reject>Нет, спасибо</button>
+    <button class="vf-cookie-banner__button vf-cookie-banner__button--accept" type="button" data-vf-cookie-accept>Принять</button>
+    <button class="vf-cookie-banner__button" type="button" data-vf-cookie-reject>Отклонить</button>
   </div>
 </div>`;
 
@@ -85,11 +85,13 @@ function replaceLegacyPolicyReferences(html) {
 
 function addPrivacyAssets(html) {
   if (!/\/css\/privacy-consent\.css/i.test(html)) {
-    html = html.replace("</head>", '<link rel="stylesheet" href="/css/privacy-consent.css"> </head>');
+    html = html.replace("</head>", '<link rel="stylesheet" href="/css/privacy-consent.css?v=4"> </head>');
   }
+  html = html.replace(/\/css\/privacy-consent\.css(?:\?v=\d+)?/gi, "/css/privacy-consent.css?v=4");
   if (!/\/js\/privacy-consent\.js/i.test(html)) {
-    html = html.replace("</head>", '<script src="/js/privacy-consent.js"></script> </head>');
+    html = html.replace("</head>", '<script src="/js/privacy-consent.js?v=3"></script> </head>');
   }
+  html = html.replace(/\/js\/privacy-consent\.js(?:\?v=\d+)?/gi, "/js/privacy-consent.js?v=3");
   if (!/data-vf-cookie-banner/i.test(html)) {
     html = html.replace("</body>", `${cookieBanner}\n</body>`);
   }
@@ -101,15 +103,15 @@ function simplifyCookieBanner(html) {
     .replace(/\s*<p class="vf-cookie-banner__title">[\s\S]*?<\/p>/gi, "")
     .replace(
       /<p class="vf-cookie-banner__text">[\s\S]*?<\/p>/gi,
-      '<p class="vf-cookie-banner__text">Включить аналитику и видео?</p>',
+      '<p class="vf-cookie-banner__text">Сайт использует файлы cookie. <a href="/privacy-policy">Политика конфиденциальности</a></p>',
     )
     .replace(
       /(<button class="vf-cookie-banner__button vf-cookie-banner__button--accept"[^>]*>)[\s\S]*?<\/button>/gi,
-      "$1Разрешить</button>",
+      "$1Принять</button>",
     )
     .replace(
       /(<button class="vf-cookie-banner__button"[^>]*data-vf-cookie-reject[^>]*>)[\s\S]*?<\/button>/gi,
-      "$1Нет, спасибо</button>",
+      "$1Отклонить</button>",
     );
 }
 
