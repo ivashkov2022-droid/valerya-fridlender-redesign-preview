@@ -19,8 +19,8 @@ const executionContext = {
   passThroughOnException() {},
 };
 
-test("publishes focused metadata for the home page", async () => {
-  const html = await readPublic("index.html");
+test("preserves focused metadata in the legacy home archive", async () => {
+  const html = await readPublic("legacy-home.html");
 
   assert.match(html, /<html lang="ru">/i);
   assert.match(html, /<title>Психолог онлайн — Валерия Фридлендер<\/title>/i);
@@ -32,9 +32,9 @@ test("publishes focused metadata for the home page", async () => {
   assert.doesNotMatch(html, /для женщин|женский психолог/i);
 });
 
-test("loads the first screen immediately and hides only the expired promotion", async () => {
+test("keeps the legacy first screen and expired promotion rules intact", async () => {
   const [html, overrides, fontLoader] = await Promise.all([
-    readPublic("index.html"),
+    readPublic("legacy-home.html"),
     readPublic("css/site-overrides.css"),
     readPublic("js/tilda-fonts.min.js"),
   ]);
@@ -137,7 +137,7 @@ test("publishes the privacy policy and separate consent as site pages", async ()
 
 test("requires separate consent in every public form and gates optional trackers", async () => {
   const filenames = [
-    "index.html",
+    "legacy-home.html",
     "page61140643.html",
     "page60765633.html",
     "page60830187.html",
@@ -189,7 +189,7 @@ test("redirects every form to an individual non-indexable thank-you page", async
   };
   const formPages = await Promise.all(
     [
-      "index.html",
+      "legacy-home.html",
       "page61140643.html",
       "page60765633.html",
       "page60830187.html",
@@ -223,7 +223,7 @@ test("redirects every form to an individual non-indexable thank-you page", async
 test("requests a fresh cookie choice after the GitHub Pages publication", async () => {
   const [script, html] = await Promise.all([
     readPublic("js/privacy-consent.js"),
-    readPublic("index.html"),
+    readPublic("legacy-home.html"),
   ]);
 
   assert.match(script, /vf_cookie_consent_v3/);
