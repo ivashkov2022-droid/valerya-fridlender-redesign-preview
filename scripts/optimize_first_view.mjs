@@ -9,7 +9,7 @@ const sourcePages = [...fullPages, "public/files/page61140643body.html"];
 const priorityHead =
   '<link rel="preload" as="image" href="/images/hero-valeria.webp" type="image/webp" fetchpriority="high"> ' +
   '<link rel="preload" as="image" href="/images/tild3935-3361-4935-b936-353131646335__432_1_02_1_03_008_02.jpg" fetchpriority="high"> ' +
-  '<link rel="stylesheet" href="/css/site-overrides.css?v=2"> ';
+  '<link rel="stylesheet" href="/css/site-overrides.css?v=3"> ';
 
 const originalHeroPattern =
   /<img class='tn-atom__img t-img' data-original='images\/tild6231-3037-4133-b263-383032396239___3\.jpg'\s*src='images\/tild6231-3037-4133-b263-383032396239__-__resize__20x___3\.jpg'\s*alt="Психолог Валерия Фридлендер" imgfield='tn_img_1736512040643'\s*\/>/g;
@@ -42,7 +42,7 @@ for (const relativeFile of sourcePages) {
   if (fullPages.includes(relativeFile)) {
     after = after.replace(
       /\/css\/site-overrides\.css(?:\?v=\d+)?/gi,
-      "/css/site-overrides.css?v=2",
+      "/css/site-overrides.css?v=3",
     );
     after = after.replace(
       /js\/tilda-fonts\.min\.js(?:\?v=\d+)?/gi,

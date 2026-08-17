@@ -32,6 +32,7 @@
 .vf-cookie-banner {
   position: fixed;
   z-index: 2147483000;
+  box-sizing: border-box;
   right: 12px;
   bottom: 12px;
   width: min(330px, calc(100% - 24px));
@@ -93,7 +94,26 @@
   .vf-cookie-banner {
     right: 8px;
     bottom: 8px;
-    width: calc(100% - 16px);
-    padding: 9px 10px;
+    width: min(280px, calc(100% - 16px));
+    padding: 7px 8px;
+    border-radius: 8px;
+  }
+
+  .vf-cookie-banner__text {
+    font-size: 10.5px;
+    line-height: 1.25;
+  }
+
+  .vf-cookie-banner__actions {
+    flex-wrap: nowrap;
+    gap: 4px;
+    margin-top: 5px;
+  }
+
+  .vf-cookie-banner__button {
+    min-height: 26px;
+    padding: 0 7px;
+    border-radius: 6px;
+    font-size: 9.5px;
   }
 }

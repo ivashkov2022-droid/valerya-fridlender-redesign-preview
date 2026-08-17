@@ -41,7 +41,7 @@ test("loads the first screen immediately and hides only the expired promotion", 
 
   assert.match(html, /rel="preload" as="image" href="\/images\/hero-valeria\.webp"/i);
   assert.match(html, /src='images\/hero-valeria\.webp' loading='eager' fetchpriority='high'/i);
-  assert.match(html, /href="\/css\/site-overrides\.css\?v=2"/i);
+  assert.match(html, /href="\/css\/site-overrides\.css\?v=3"/i);
   assert.match(overrides, /#rec1022137526[\s\S]*#rec1022300811[\s\S]*display:\s*none\s*!important/i);
   assert.match(overrides, /\.t-records[\s\S]*opacity:\s*1\s*!important/i);
   assert.match(overrides, /\.t396__artboard\.rendering \.tn-elem[\s\S]*visibility:\s*visible\s*!important/i);
