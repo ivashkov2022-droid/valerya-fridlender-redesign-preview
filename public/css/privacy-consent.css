@@ -1,0 +1,110 @@
+.vf-consent-group {
+  margin-top: 14px;
+}
+
+.vf-consent-group .t-checkbox__control {
+  align-items: flex-start;
+  color: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.vf-consent-group a,
+.vf-privacy-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.vf-form-warning {
+  margin-top: 8px;
+  color: inherit;
+  font-size: 11px;
+  line-height: 1.35;
+  opacity: 0.74;
+}
+
+.vf-cookie-banner[hidden] {
+  display: none !important;
+}
+
+.vf-cookie-banner {
+  position: fixed;
+  z-index: 2147483000;
+  right: 18px;
+  bottom: 18px;
+  width: min(520px, calc(100% - 36px));
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 22px;
+  color: #fff;
+  background: rgba(6, 11, 27, 0.96);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+  font-family: Arial, Helvetica, sans-serif;
+  backdrop-filter: blur(18px);
+}
+
+.vf-cookie-banner__title {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.vf-cookie-banner__text {
+  margin: 0;
+  color: #d8d3df;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.vf-cookie-banner__text a {
+  color: #fff;
+}
+
+.vf-cookie-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.vf-cookie-banner__button {
+  min-height: 42px;
+  padding: 0 17px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: #fff;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.vf-cookie-banner__button--accept {
+  border-color: #11d279;
+  color: #04152a;
+  background: #11d279;
+}
+
+.vf-cookie-banner__button:focus-visible,
+.vf-cookie-banner__text a:focus-visible {
+  outline: 3px solid #ff8b5c;
+  outline-offset: 3px;
+}
+
+@media (max-width: 520px) {
+  .vf-cookie-banner {
+    right: 10px;
+    bottom: 10px;
+    width: calc(100% - 20px);
+    padding: 17px;
+    border-radius: 18px;
+  }
+
+  .vf-cookie-banner__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

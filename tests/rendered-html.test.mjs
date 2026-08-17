@@ -92,3 +92,70 @@ test("redirects duplicate home-page URLs", async () => {
   assert.equal(response.status, 301);
   assert.equal(response.headers.get("location"), "https://preview.example/");
 });
+
+test("publishes the privacy policy and separate consent as site pages", async () => {
+  const [policy, consent] = await Promise.all([
+    readPublic("privacy-policy.html"),
+    readPublic("personal-data-consent.html"),
+  ]);
+
+  assert.match(policy, /<h1>Политика обработки персональных данных<\/h1>/i);
+  assert.match(policy, /Индивидуальный предприниматель Остратова Валерия Андреевна/i);
+  assert.match(policy, /ИНН: 781632346929/i);
+  assert.match(policy, /Яндекс\.Метрика/i);
+  assert.match(policy, /<meta name="robots" content="noindex, follow">/i);
+  assert.match(policy, /href="\/personal-data-consent"/i);
+
+  assert.match(consent, /<h1>Согласие на обработку персональных данных<\/h1>/i);
+  assert.match(consent, /Подтверждается отдельной галочкой/i);
+  assert.match(consent, /не более 90 дней/i);
+  assert.match(consent, /href="\/privacy-policy"/i);
+});
+
+test("requires separate consent in every public form and gates optional trackers", async () => {
+  const filenames = [
+    "index.html",
+    "page61140643.html",
+    "page60765633.html",
+    "page60830187.html",
+    "page60830221.html",
+    "page60830241.html",
+  ];
+  const pages = await Promise.all(filenames.map(readPublic));
+  let formCount = 0;
+
+  for (const html of pages) {
+    const forms = html.match(/<form\b[\s\S]*?<\/form>/gi) ?? [];
+    formCount += forms.length;
+    for (const form of forms) {
+      assert.match(form, /href="\/personal-data-consent"/i);
+      assert.match(form, /href="\/privacy-policy"/i);
+      assert.match(form, /data-tilda-req="1"/i);
+    }
+    assert.doesNotMatch(html, /clck\.ru\/3MmNdz|disk\.yandex\.ru\/i\/yS_S-DEt6lcttQ/i);
+    assert.doesNotMatch(html, /<script type="text\/javascript" data-tilda-cookie-type="analytics"/i);
+  }
+
+  assert.equal(formCount, 20);
+  assert.match(pages[0], /data-vf-consent="analytics"/i);
+  assert.match(pages[0], /data-youtube-consent-id=/i);
+  assert.match(pages[0], /data-vf-cookie-banner/i);
+});
+
+test("serves clean legal-document routes", async () => {
+  const worker = await loadWorker();
+  const requestedPaths = [];
+  const env = {
+    ASSETS: {
+      fetch: async (request) => {
+        requestedPaths.push(new URL(request.url).pathname);
+        return new Response("legal", { status: 200 });
+      },
+    },
+  };
+
+  await worker.fetch(new Request("https://preview.example/privacy-policy"), env, executionContext);
+  await worker.fetch(new Request("https://preview.example/personal-data-consent"), env, executionContext);
+
+  assert.deepEqual(requestedPaths, ["/privacy-policy.html", "/personal-data-consent.html"]);
+});
