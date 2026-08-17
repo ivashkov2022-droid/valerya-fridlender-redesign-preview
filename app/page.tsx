@@ -1,332 +1,239 @@
 const trustPoints = [
-  {
-    title: "5 лет практики",
-    text: "Более 1000 проведённых сессий",
-  },
-  {
-    title: "Доказательные методы",
-    text: "IFS, EMDR и ImTT в бережной работе",
-  },
-  {
-    title: "Онлайн по всему миру",
-    text: "Индивидуально и в малых группах",
-  },
+  { title: "Практика онлайн", text: "Сессии из любой страны и очные встречи в Санкт-Петербурге" },
+  { title: "Доказательный подход", text: "IFS, EMDR и ImTT — методы, которые подбираются под ваш запрос" },
+  { title: "Бережно и конфиденциально", text: "Пространство без оценок, давления и необходимости быть удобным" },
 ];
 
-const directions = [
+const services = [
   {
-    number: "01",
-    title: "Тревога и стресс",
-    text: "Когда мысли не останавливаются, а внутри постоянно ждёшь, что что-то пойдёт не так.",
+    title: "Индивидуальная терапия",
+    text: "Поддержка при тревоге, стрессе, жизненных переменах и ощущении, что вы потеряли контакт с собой.",
+    image: "/images/tild3266-3864-4230-a237-396466653537__5190700468546954842.jpg",
   },
   {
-    number: "02",
     title: "Травматический опыт",
-    text: "Когда прошлое продолжает влиять на настоящее, хотя кажется, что всё уже давно позади.",
+    text: "Работа с прошлым опытом, который продолжает влиять на чувства, решения и реакции в настоящем.",
+    image: "/images/tild3332-3462-4231-b334-656163366338__5190700468546954841.jpg",
   },
   {
-    number: "03",
-    title: "Внутренние конфликты",
-    text: "Когда одна часть вас хочет перемен, а другая удерживает в привычном и безопасном.",
+    title: "Отношения с собой",
+    text: "Самооценка, внутренние конфликты, жёсткая самокритика и привычка постоянно требовать от себя большего.",
+    image: "/images/tild3438-3931-4264-a439-386266626535__img_20260220_160404.jpg",
   },
   {
-    number: "04",
-    title: "Отношения",
-    text: "Когда близость перестала давать опору, а повторяющиеся сценарии причиняют боль.",
-  },
-  {
-    number: "05",
-    title: "Самооценка",
-    text: "Когда требования к себе растут быстрее достижений и невозможно почувствовать: «я достаточно хороша».",
-  },
-  {
-    number: "06",
-    title: "Выгорание и потеря сил",
-    text: "Когда привычка быть сильной для всех оставляет всё меньше места для собственной жизни.",
+    title: "Отношения с другими",
+    text: "Повторяющиеся сценарии, сложности с близостью, границами и возможностью быть услышанным.",
+    image: "/images/tild3136-3636-4338-a538-346363396133__5242600385204131198.jpg",
   },
 ];
 
 const methods = [
   {
-    label: "Система внутренней семьи",
     title: "IFS",
-    text: "Помогает услышать разные части личности, снизить внутреннюю борьбу и вернуть управление спокойному, целостному «Я».",
+    subtitle: "Система внутренней семьи",
+    text: "Помогает услышать разные части личности, уменьшить внутреннюю борьбу и вернуть спокойное управление своей жизнью.",
   },
   {
-    label: "Переработка движением глаз",
     title: "EMDR",
-    text: "Помогает мозгу переработать тяжёлый опыт, чтобы воспоминания перестали управлять реакциями в настоящем.",
+    subtitle: "Переработка травматического опыта",
+    text: "Помогает мозгу переработать тяжёлые события, чтобы воспоминания перестали запускать прежние реакции.",
   },
   {
-    label: "Трансформация образов",
     title: "ImTT",
-    text: "Бережная работа с эмоциональной болью через образы — без необходимости снова подробно проживать травму.",
+    subtitle: "Трансформация образов",
+    text: "Бережная работа с эмоциональной болью через образы — без необходимости заново подробно проживать травму.",
   },
 ];
 
 const steps = [
-  ["01", "Знакомимся", "Вы рассказываете, что происходит. Я помогаю сформулировать запрос и понять, подходим ли мы друг другу."],
-  ["02", "Определяем маршрут", "Выбираем направление и темп работы. Никаких универсальных схем — процесс строится вокруг вас."],
-  ["03", "Возвращаем опору", "Шаг за шагом меняем старые реакции и переносим новые способы справляться в повседневную жизнь."],
-];
-
-const resources = [
-  ["Тест", "Уровень тревоги", "Понять, насколько тревога влияет на повседневную жизнь"],
-  ["Чек-лист", "Признаки выгорания", "Проверить состояние и заметить сигналы перегрузки"],
-  ["Статья", "Почему я злюсь?", "Разобраться, какую потребность защищает ваша злость"],
+  ["01", "Знакомство", "Обсуждаем, что происходит сейчас, и определяем запрос."],
+  ["02", "Маршрут", "Выбираем подходящий формат, направление и комфортный темп."],
+  ["03", "Работа", "Меняем старые реакции и переносим новые способы справляться в жизнь."],
 ];
 
 const faqs = [
-  ["Как понять, что мне нужна помощь психолога?", "Если тревога, усталость, самокритика или повторяющиеся ситуации заметно мешают жить — этого уже достаточно, чтобы прийти. Не нужно ждать кризиса или заранее уметь точно сформулировать запрос."],
-  ["Как проходит первая сессия?", "Встреча длится около 50 минут. Мы знакомимся, обсуждаем, что беспокоит вас сейчас, и определяем возможное направление работы. Вы не обязаны рассказывать больше, чем готовы."],
-  ["Сколько встреч потребуется?", "Это зависит от запроса, глубины переживаний и желаемых изменений. Иногда несколько встреч дают нужную ясность, для устойчивой глубокой работы требуется больше времени."],
-  ["Можно ли заниматься онлайн?", "Да. Основной формат практики — онлайн-сессии, доступные из любой страны. Важно только тихое личное пространство и стабильная связь."],
+  ["Как проходит первая встреча?", "Сессия длится около 50 минут. Мы знакомимся, обсуждаем то, что беспокоит вас сейчас, и вместе определяем возможное направление работы. Рассказывать больше, чем вы готовы, не нужно."],
+  ["Сколько встреч потребуется?", "Это зависит от запроса и желаемой глубины изменений. Иногда нескольких встреч достаточно для ясности, а для устойчивой глубокой работы требуется больше времени."],
+  ["Можно ли заниматься онлайн?", "Да. Основной формат практики — онлайн-сессии из любой страны. Понадобятся только тихое личное пространство и стабильная связь."],
 ];
 
 export default function Home() {
   return (
     <main>
-      <div className="availability-bar">
-        <span>Онлайн-сессии · Санкт-Петербург</span>
-        <a href="#contact">Записаться на знакомство</a>
+      <div className="info-bar">
+        <a href="tel:+79111284444">+7 911 128-44-44</a>
+        <span>Онлайн по всему миру</span>
+        <span>Санкт-Петербург</span>
       </div>
 
       <header className="site-header">
         <a className="brand" href="#top" aria-label="Валерия Фридлендер — главная">
-          <span>Валерия</span>
-          <strong>Фридлендер</strong>
+          <span>Валерия Фридлендер</span>
+          <small>практический психолог</small>
         </a>
         <nav aria-label="Основная навигация">
-          <a href="#directions">Направления</a>
+          <a href="#services">Направления</a>
           <a href="#approach">Подход</a>
           <a href="#about">Обо мне</a>
-          <a href="#resources">Материалы</a>
+          <a href="#formats">Стоимость</a>
+          <a href="#contact">Контакты</a>
         </nav>
-        <a className="header-cta" href="#contact">
-          Начать работу <span aria-hidden="true">→</span>
-        </a>
+        <a className="nav-cta" href="#contact">Начать работу <span aria-hidden="true">⟶</span></a>
       </header>
 
       <section className="hero" id="top">
-        <div className="hero-copy">
-          <p className="eyebrow">Психолог для тех, кто привык справляться</p>
-          <h1>
-            Вернуться к себе —
-            <em> спокойно и без оценок.</em>
-          </h1>
-          <p className="hero-lead">
-            Помогаю прожить тревогу, травматический опыт и внутренние конфликты,
-            чтобы снова почувствовать опору и свободу выбирать свою жизнь.
-          </p>
-          <div className="hero-actions">
-            <a className="button button-primary" href="#contact">
-              Записаться на консультацию
-            </a>
-            <a className="text-link" href="#directions">
-              С чем я работаю <span aria-hidden="true">↘</span>
-            </a>
-          </div>
-          <p className="hero-note">Первая встреча — знакомство и определение направления работы.</p>
-        </div>
-
-        <div className="hero-visual" aria-label="Психолог Валерия Фридлендер">
-          <div className="hero-monogram" aria-hidden="true">VF</div>
-          <img
-            src="/images/hero-valeria.webp"
-            alt="Психолог Валерия Фридлендер"
-            width="1680"
-            height="1365"
-            fetchPriority="high"
-          />
-          <div className="hero-caption">
-            <span>Валерия Фридлендер</span>
-            <small>Практический психолог</small>
-          </div>
+        <img className="hero-image" src="/images/tild3534-6531-4764-a535-323831336663__img_0752.jpg" alt="Психолог Валерия Фридлендер" width="1680" height="1120" fetchPriority="high" />
+        <div className="hero-shade" aria-hidden="true" />
+        <div className="hero-content">
+          <h1>Валерия<br />Фридлендер</h1>
+          <p className="hero-label">Психолог в Санкт-Петербурге и онлайн</p>
+          <p className="hero-script">Современная терапия для спокойной и своей жизни.</p>
+          <p className="hero-text">Помогаю справляться с тревогой, травматическим опытом и внутренними конфликтами, возвращая опору на себя.</p>
+          <a className="button button-light" href="#contact">Записаться на знакомство</a>
         </div>
       </section>
 
-      <section className="trust-strip" aria-label="О практике">
-        {trustPoints.map((item, index) => (
-          <article key={item.title}>
-            <span className="trust-index">0{index + 1}</span>
-            <div>
-              <h2>{item.title}</h2>
-              <p>{item.text}</p>
-            </div>
-          </article>
-        ))}
+      <section className="trust-strip" aria-label="Преимущества практики">
+        {trustPoints.map((item) => <article key={item.title}><h2>{item.title}</h2><p>{item.text}</p></article>)}
       </section>
 
-      <section className="intro-section section-shell" id="directions">
-        <div className="section-kicker">Направления работы</div>
-        <div className="intro-heading">
-          <h2>Можно перестать справляться в одиночку.</h2>
-          <p>
-            Терапия начинается не с диагноза, а с честного разговора о том, как вам сейчас.
-            Выберите тему, которая отзывается — каждая станет отдельным подробным маршрутом на сайте.
-          </p>
+      <section className="intro-split section-shell">
+        <div className="intro-photo"><img src="/images/tild3266-3864-4230-a237-396466653537__5190700468546954842.jpg" alt="Психологическая консультация" width="1280" height="854" loading="lazy" /></div>
+        <div className="intro-copy">
+          <p className="eyebrow">Терапия для реальной жизни</p>
+          <h2>Снаружи всё может выглядеть хорошо. Внутри — ощущаться совсем иначе.</h2>
+          <p>Можно быть ответственным, успешным и привычно держать всё под контролем — и одновременно чувствовать тревогу, усталость или одиночество.</p>
+          <p>В терапии мы сокращаем расстояние между тем, какой вашу жизнь видят другие, и тем, как вы на самом деле её проживаете.</p>
+          <a className="button button-outline" href="#contact">Начать работу ⟶</a>
         </div>
-        <div className="direction-grid">
-          {directions.map((item) => (
-            <a className="direction-card" href="#contact" key={item.number}>
-              <span>{item.number}</span>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-              <strong aria-hidden="true">Подробнее ↗</strong>
-            </a>
+      </section>
+
+      <section className="services-section section-shell" id="services">
+        <div className="section-heading centered-heading">
+          <p className="eyebrow">Валерия Фридлендер · психологическая практика</p>
+          <h2>Направления работы</h2>
+          <p className="section-script">Терапия может быть современной, глубокой и человечной.</p>
+          <p className="section-description">Не обязательно точно знать название проблемы. Достаточно выбрать то, что больше всего похоже на ваше состояние сейчас.</p>
+        </div>
+        <div className="service-grid">
+          {services.map((service) => (
+            <article className="service-card" key={service.title}>
+              <img src={service.image} alt="" width="1280" height="854" loading="lazy" />
+              <div><h3>{service.title}</h3><p>{service.text}</p><a href="#contact">Подробнее</a></div>
+            </article>
           ))}
         </div>
       </section>
 
-      <section className="statement-section">
-        <p>Вам не нужно становиться другим человеком.</p>
-        <h2>Важно снова услышать себя — без шума чужих ожиданий.</h2>
-      </section>
-
-      <section className="about-section section-shell" id="about">
-        <div className="about-image-wrap">
-          <img
-            src="/images/tild6461-6666-4637-b236-366364393738__img_7708.jpg"
-            alt="Валерия Фридлендер"
-            width="1680"
-            height="2240"
-            loading="lazy"
-          />
-          <div className="about-image-note">Санкт-Петербург · онлайн по всему миру</div>
-        </div>
-        <div className="about-copy">
-          <div className="section-kicker">Обо мне</div>
-          <h2>Привет, я Валерия.</h2>
-          <p className="about-lead">
-            Я практический психолог. Уже пять лет помогаю людям превращать растерянность
-            в понимание, а страх — в движение вперёд.
-          </p>
-          <p>
-            В моём пространстве не нужно быть сильной, идеальной или удобной. Здесь можно
-            остановиться, снять привычную маску и услышать, что на самом деле важно именно вам.
-          </p>
-          <div className="about-facts">
-            <div><strong>1 584+</strong><span>часа профессионального обучения</span></div>
-            <div><strong>1 008+</strong><span>проведённых сессий</span></div>
-          </div>
-          <a className="button button-dark" href="#approach">Узнать о моём подходе</a>
-        </div>
+      <section className="promise-band">
+        <p>Работа со специалистом не должна ощущаться как ещё один экзамен.</p>
+        <h2>Здесь не нужно быть сильнее, правильнее или удобнее.</h2>
+        <a href="#contact">Познакомиться с Валерией ⟶</a>
       </section>
 
       <section className="methods-section section-shell" id="approach">
-        <div className="methods-head">
-          <div>
-            <div className="section-kicker section-kicker-light">Методы</div>
-            <h2>Бережно к чувствам.<br />Точно к причине.</h2>
-          </div>
-          <p>
-            Я соединяю несколько подходов, чтобы работа соответствовала вашему опыту,
-            а не заставляла вас соответствовать заранее выбранной методике.
-          </p>
+        <div className="methods-intro">
+          <p className="eyebrow">Методы</p>
+          <h2>Точно к причине.<br /><em>Бережно к человеку.</em></h2>
+          <p>Подход подбирается под ваш опыт и состояние. Метод — это инструмент, а не схема, которой человек обязан соответствовать.</p>
         </div>
-        <div className="methods-grid">
-          {methods.map((method) => (
-            <article className="method-card" key={method.title}>
-              <span>{method.label}</span>
-              <h3>{method.title}</h3>
-              <p>{method.text}</p>
-              <a href="#contact">Как проходит работа →</a>
-            </article>
+        <div className="method-list">
+          {methods.map((method, index) => (
+            <article key={method.title}><span>0{index + 1}</span><div><small>{method.subtitle}</small><h3>{method.title}</h3><p>{method.text}</p></div></article>
           ))}
         </div>
+      </section>
+
+      <section className="about-section section-shell" id="about">
+        <div className="about-copy">
+          <p className="eyebrow">Обо мне</p>
+          <h2>Привет,<br /><em>я Валерия.</em></h2>
+          <p className="about-lead">Я практический психолог. Уже пять лет помогаю людям превращать растерянность в понимание, а страх — в движение вперёд.</p>
+          <p>За плечами более 1 500 часов профессионального обучения и более 1 000 проведённых сессий. Но главное в работе для меня — живой контакт, уважение к вашему темпу и честность.</p>
+          <a className="button button-outline" href="#contact">Записаться на встречу ⟶</a>
+        </div>
+        <div className="about-photo"><img src="/images/tild6461-6666-4637-b236-366364393738__img_7708.jpg" alt="Валерия Фридлендер" width="1680" height="2240" loading="lazy" /></div>
       </section>
 
       <section className="process-section section-shell">
-        <div className="process-intro">
-          <div className="section-kicker">Как начать</div>
-          <h2>Путь к себе начинается с одной встречи.</h2>
+        <div className="section-heading centered-heading">
+          <p className="eyebrow">Как начать</p><h2>Путь начинается с одной встречи</h2>
+          <p className="section-script">Без обязательств продолжать и без необходимости заранее знать все ответы.</p>
         </div>
-        <div className="steps-list">
-          {steps.map(([number, title, text]) => (
-            <article key={number}>
-              <span>{number}</span>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
+        <div className="steps-grid">
+          {steps.map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}
         </div>
       </section>
 
-      <section className="formats-section section-shell">
-        <div className="formats-copy">
-          <div className="section-kicker section-kicker-light">Форматы работы</div>
-          <h2>Поддержка в том объёме, который нужен сейчас.</h2>
-          <p>Формат и количество встреч определяем вместе после знакомства.</p>
-        </div>
-        <div className="format-list">
-          <article><span>01</span><div><h3>Индивидуальная сессия</h3><p>50 минут · онлайн</p></div><strong>10 000 ₽</strong></article>
-          <article><span>02</span><div><h3>Фокус</h3><p>3 встречи для работы с конкретной целью</p></div><strong>24 000 ₽</strong></article>
-          <article><span>03</span><div><h3>Гармония</h3><p>5 встреч для более глубокой проработки</p></div><strong>35 000 ₽</strong></article>
-          <article><span>04</span><div><h3>Малая группа</h3><p>До пяти участников</p></div><strong>от 5 000 ₽</strong></article>
-        </div>
-      </section>
-
-      <section className="resources-section section-shell" id="resources">
-        <div className="resources-head">
-          <div>
-            <div className="section-kicker">Материалы</div>
-            <h2>Начать можно самостоятельно.</h2>
+      <section className="formats-section" id="formats">
+        <div className="formats-inner section-shell">
+          <div className="formats-heading"><p className="eyebrow eyebrow-light">Форматы и стоимость</p><h2>Поддержка в нужном объёме.</h2><p>Формат и количество встреч определяем вместе после знакомства.</p></div>
+          <div className="price-list">
+            <article><span>Индивидуальная сессия</span><small>50 минут · онлайн</small><strong>10 000 ₽</strong></article>
+            <article><span>Фокус</span><small>3 встречи с конкретной целью</small><strong>24 000 ₽</strong></article>
+            <article><span>Гармония</span><small>5 встреч для глубокой работы</small><strong>35 000 ₽</strong></article>
+            <article><span>Малая группа</span><small>До пяти участников</small><strong>от 5 000 ₽</strong></article>
           </div>
-          <p>Тесты, короткие разборы и практические материалы, которые помогают лучше понять своё состояние.</p>
-        </div>
-        <div className="resource-grid">
-          {resources.map(([type, title, text], index) => (
-            <a href="#contact" className={`resource-card resource-card-${index + 1}`} key={title}>
-              <span>{type}</span>
-              <h3>{title}</h3>
-              <p>{text}</p>
-              <strong aria-hidden="true">Открыть ↗</strong>
-            </a>
-          ))}
         </div>
       </section>
 
       <section className="faq-section section-shell">
-        <div className="faq-heading">
-          <div className="section-kicker">Вопросы</div>
-          <h2>До первой встречи</h2>
-        </div>
+        <div className="faq-title"><p className="eyebrow">Вопросы</p><h2>До первой встречи</h2></div>
         <div className="faq-list">
-          {faqs.map(([question, answer], index) => (
-            <details key={question} open={index === 0}>
-              <summary><span>{question}</span><i aria-hidden="true">+</i></summary>
-              <p>{answer}</p>
-            </details>
-          ))}
+          {faqs.map(([question, answer], index) => <details key={question} open={index === 0}><summary><span>{question}</span><i aria-hidden="true">+</i></summary><p>{answer}</p></details>)}
         </div>
       </section>
 
       <section className="contact-section" id="contact">
-        <div className="contact-copy">
-          <span>Готовы начать?</span>
-          <h2>Давайте найдём точку, с которой станет легче двигаться.</h2>
-          <p>Напишите Валерии в удобном мессенджере — коротко расскажите, что беспокоит, и мы подберём время.</p>
-          <div>
-            <a className="button button-primary" href="https://t.me/Valeria_Fridlender">Написать в Telegram</a>
-            <a className="contact-link" href="https://wa.me/79111284444">WhatsApp ↗</a>
-          </div>
-        </div>
-        <div className="contact-portrait">
-          <img
-            src="/images/tild3236-3363-4432-a238-353234313366__img_7710.jpg"
-            alt="Валерия Фридлендер в рабочем кабинете"
-            width="1680"
-            height="2240"
-            loading="lazy"
-          />
+        <div className="contact-shade" aria-hidden="true" />
+        <div className="contact-inner">
+          <p className="eyebrow eyebrow-light">Готовы начать?</p>
+          <h2>Давайте найдём точку,<br /><em>с которой станет легче.</em></h2>
+          <p>Коротко расскажите, что вас беспокоит, и мы подберём время для знакомства.</p>
+          <div><a className="button button-light" href="https://t.me/Valeria_Fridlender">Написать в Telegram</a><a className="contact-link" href="https://wa.me/79111284444">WhatsApp ⟶</a></div>
         </div>
       </section>
 
-      <footer>
-        <div className="footer-brand"><span>Валерия</span><strong>Фридлендер</strong></div>
-        <p>Практический психолог · Санкт-Петербург · онлайн</p>
-        <div><a href="https://t.me/Valeria_Fridlender">Telegram</a><a href="https://vk.com/lerapsy">VKontakte</a><a href="mailto:valeryafridlender@gmail.com">Email</a></div>
-        <small>© 2026 · Политика конфиденциальности</small>
+      <footer className="site-footer">
+        <div className="footer-grid">
+          <div className="footer-intro">
+            <div className="footer-brand"><span>Валерия Фридлендер</span><small>практический психолог</small></div>
+            <p>Современная психологическая помощь с уважением к вашему опыту и темпу.</p>
+            <a className="footer-button" href="https://t.me/Valeria_Fridlender">Начать работу ⟶</a>
+          </div>
+
+          <div className="footer-column">
+            <h3>Навигация</h3>
+            <a href="#services">Направления работы</a>
+            <a href="#approach">Методы</a>
+            <a href="#about">О Валерии</a>
+            <a href="#formats">Форматы и стоимость</a>
+            <a href="#contact">Запись</a>
+          </div>
+
+          <div className="footer-column">
+            <h3>Направления</h3>
+            <a href="#services">Индивидуальная терапия</a>
+            <a href="#services">Тревога и стресс</a>
+            <a href="#services">Травматический опыт</a>
+            <a href="#services">Отношения с собой</a>
+            <a href="#services">Отношения с другими</a>
+          </div>
+
+          <div className="footer-column footer-contacts">
+            <h3>Контакты</h3>
+            <a href="tel:+79111284444">+7 911 128-44-44</a>
+            <a href="mailto:valeryafridlender@gmail.com">valeryafridlender@gmail.com</a>
+            <span>Санкт-Петербург</span>
+            <span>Онлайн по всему миру</span>
+            <div><a href="https://t.me/Valeria_Fridlender">Telegram</a><a href="https://vk.com/lerapsy">VKontakte</a></div>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <span>© 2026 Валерия Фридлендер</span>
+          <div><a href="/privacy-policy">Политика конфиденциальности</a><a href="/personal-data-consent">Согласие на обработку данных</a></div>
+        </div>
       </footer>
     </main>
   );
