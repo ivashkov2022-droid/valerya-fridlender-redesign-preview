@@ -293,6 +293,7 @@ h1, h2, h3, p { margin-top: 0; }
 .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .service-card { min-width: 0; display: flex; flex-direction: column; background: var(--blue); color: white; }
 .service-card > img { width: 100%; height: 240px; object-fit: cover; }
+.service-card:first-child > img { object-position: center top; }
 .service-card:nth-child(2) > img { object-position: 40% center; }
 .service-card:nth-child(3) > img { object-position: 50% center; }
 .service-card > div { min-height: 326px; padding: 25px 20px 24px; display: flex; flex-direction: column; }
