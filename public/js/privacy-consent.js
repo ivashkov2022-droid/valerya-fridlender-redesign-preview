@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var storageKey = "vf_cookie_consent_v2";
+  var storageKey = "vf_cookie_consent_v3";
   var choice = null;
 
   try {

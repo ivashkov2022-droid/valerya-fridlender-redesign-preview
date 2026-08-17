@@ -50,6 +50,12 @@
   line-height: 1.4;
 }
 
+.vf-cookie-banner__text a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .vf-cookie-banner__actions {
   display: flex;
   flex-wrap: wrap;

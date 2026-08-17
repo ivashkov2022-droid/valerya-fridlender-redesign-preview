@@ -125,7 +125,7 @@ test("publishes the privacy policy and separate consent as site pages", async ()
   assert.match(consent, /<h1>Согласие на обработку персональных данных<\/h1>/i);
   assert.match(consent, /не более 90 дней/i);
   assert.match(consent, /href="\/privacy-policy"/i);
-  assert.match(policy, /Включить аналитику и видео\?/i);
+  assert.match(policy, /Сайт использует файлы cookie/i);
   assert.doesNotMatch(policy, /Настройки приватности|Необходимые функции работают всегда/i);
   assert.doesNotMatch(policy, /legal-toc/i);
 });
@@ -158,8 +158,10 @@ test("requires separate consent in every public form and gates optional trackers
   assert.match(pages[0], /data-vf-consent="analytics"/i);
   assert.match(pages[0], /data-youtube-consent-id=/i);
   assert.match(pages[0], /data-vf-cookie-banner/i);
-  assert.match(pages[0], />Включить аналитику и видео\?<\/p>/i);
-  assert.match(pages[0], /data-vf-cookie-reject>Нет, спасибо<\/button>/i);
+  assert.match(pages[0], /Сайт использует файлы cookie/i);
+  assert.match(pages[0], /data-vf-cookie-accept>Принять<\/button>/i);
+  assert.match(pages[0], /data-vf-cookie-reject>Отклонить<\/button>/i);
+  assert.doesNotMatch(pages[0], /Включить аналитику и видео|Нет, спасибо/i);
 });
 
 test("requests a fresh cookie choice after the GitHub Pages publication", async () => {
@@ -168,9 +170,9 @@ test("requests a fresh cookie choice after the GitHub Pages publication", async 
     readPublic("index.html"),
   ]);
 
-  assert.match(script, /vf_cookie_consent_v2/);
-  assert.doesNotMatch(script, /vf_cookie_consent_v1/);
-  assert.match(html, /src="\/js\/privacy-consent\.js\?v=2"/i);
+  assert.match(script, /vf_cookie_consent_v3/);
+  assert.doesNotMatch(script, /vf_cookie_consent_v[12]/);
+  assert.match(html, /src="\/js\/privacy-consent\.js\?v=3"/i);
 });
 
 test("serves clean legal-document routes", async () => {
