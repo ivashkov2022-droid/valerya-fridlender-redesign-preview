@@ -36,6 +36,8 @@ const cleanRouteAssets: Record<string, string> = {
   "/check-list-4": "/page60830241.html",
   "/contact": "/page60746837.html",
   "/blog": "/page61113071.html",
+  "/privacy-policy": "/privacy-policy.html",
+  "/personal-data-consent": "/personal-data-consent.html",
 };
 
 const rootRedirects = new Set([

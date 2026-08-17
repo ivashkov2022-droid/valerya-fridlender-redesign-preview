@@ -67,3 +67,8 @@ RewriteRule ^contact/$ page60746837.html [NC]
 RewriteRule ^blog$ page61113071.html [NC]
 RewriteRule ^blog/$ page61113071.html [NC]
 
+RewriteRule ^privacy-policy$ privacy-policy.html [NC]
+RewriteRule ^privacy-policy/$ privacy-policy.html [NC]
+
+RewriteRule ^personal-data-consent$ personal-data-consent.html [NC]
+RewriteRule ^personal-data-consent/$ personal-data-consent.html [NC]
