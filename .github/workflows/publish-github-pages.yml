@@ -25,8 +25,28 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build redesigned site
+        run: pnpm run build
+
       - name: Prepare static site
-        run: node scripts/prepare_github_pages.mjs public _site
+        run: node scripts/prepare_github_pages.mjs dist/client _site dist/server/index.js
+
+      - name: Test generated site
+        run: node --test tests/rendered-html.test.mjs
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
