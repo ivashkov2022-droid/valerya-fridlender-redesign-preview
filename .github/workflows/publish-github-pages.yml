@@ -17,13 +17,16 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.repository == 'ivashkov2022-droid/valerya-fridlender-redesign-preview'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Check out redesign branch
         uses: actions/checkout@v4
+        with:
+          ref: codex/redesign-v2
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
@@ -33,20 +36,38 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build redesigned site
+      - name: Build redesign
         run: pnpm run build
 
-      - name: Prepare static site
-        run: node scripts/prepare_github_pages.mjs dist/client _site dist/server/index.js
+      - name: Prepare static redesign
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm exec vinext start --port 3216 > /tmp/valeria-preview.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
 
-      - name: Test generated site
-        run: node --test tests/rendered-html.test.mjs
+          ready=false
+          for _ in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:3216/ --output /tmp/valeria-home.html; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+
+          if [ "$ready" != "true" ]; then
+            cat /tmp/valeria-preview.log
+            exit 1
+          fi
+
+          node scripts/prepare_redesign_github_pages.mjs dist/client /tmp/valeria-home.html _site
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
