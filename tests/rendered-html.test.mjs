@@ -107,9 +107,11 @@ test("publishes the privacy policy and separate consent as site pages", async ()
   assert.match(policy, /href="\/personal-data-consent"/i);
 
   assert.match(consent, /<h1>Согласие на обработку персональных данных<\/h1>/i);
-  assert.match(consent, /Подтверждается отдельной галочкой/i);
   assert.match(consent, /не более 90 дней/i);
   assert.match(consent, /href="\/privacy-policy"/i);
+  assert.match(policy, /Включить аналитику и видео\?/i);
+  assert.doesNotMatch(policy, /Настройки приватности|Необходимые функции работают всегда/i);
+  assert.doesNotMatch(policy, /legal-toc/i);
 });
 
 test("requires separate consent in every public form and gates optional trackers", async () => {
@@ -140,6 +142,8 @@ test("requires separate consent in every public form and gates optional trackers
   assert.match(pages[0], /data-vf-consent="analytics"/i);
   assert.match(pages[0], /data-youtube-consent-id=/i);
   assert.match(pages[0], /data-vf-cookie-banner/i);
+  assert.match(pages[0], />Включить аналитику и видео\?<\/p>/i);
+  assert.match(pages[0], /data-vf-cookie-reject>Нет, спасибо<\/button>/i);
 });
 
 test("serves clean legal-document routes", async () => {
