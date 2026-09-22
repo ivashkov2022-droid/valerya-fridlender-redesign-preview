@@ -30,6 +30,32 @@ export type ServiceKey =
   | "self-relationship"
   | "relationships";
 
+const serviceIndex: Record<ServiceKey, string> = {
+  "individual-therapy": "01",
+  "trauma-experience": "02",
+  "self-relationship": "03",
+  relationships: "04",
+};
+
+const serviceAccent: Record<ServiceKey, string> = {
+  "individual-therapy": "слишком много сил",
+  "trauma-experience": "Реакция на него — остаться",
+  "self-relationship": "вашим голосом",
+  relationships: "сценарий остаётся",
+};
+
+const methodAccent: Record<MethodKey, string> = {
+  ifs: "внутренней семьи",
+  emdr: "травматического опыта",
+  imtt: "образов",
+};
+
+function AccentTitle({ text, accent }: { text: string; accent: string }) {
+  const accentStart = text.indexOf(accent);
+  if (accentStart < 0) return text;
+  return <>{text.slice(0, accentStart)}<em>{accent}</em>{text.slice(accentStart + accent.length)}</>;
+}
+
 type LeadContent = {
   eyebrow: string;
   title: string;
@@ -387,18 +413,23 @@ export function ServiceModal({ serviceKey, onClose, onContact }: { serviceKey: S
 
   return (
     <div className="service-modal" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <section className="service-dialog" role="dialog" aria-modal="true" aria-labelledby={`service-title-${serviceKey}`}>
+      <section className="service-dialog" data-service={serviceKey} role="dialog" aria-modal="true" aria-labelledby={`service-title-${serviceKey}`}>
+        <span className="service-index" aria-hidden="true">{serviceIndex[serviceKey]}</span>
         <button ref={closeButton} className="service-close" type="button" onClick={onClose} aria-label="Закрыть описание">×</button>
-        <p className="eyebrow">{content.eyebrow}</p>
-        <h2 id={`service-title-${serviceKey}`}>{content.title}</h2>
-        <p className="service-intro">{content.intro}</p>
+        <header className="service-head">
+          <p className="eyebrow">{content.eyebrow}</p>
+          <h2 id={`service-title-${serviceKey}`}><AccentTitle text={content.title} accent={serviceAccent[serviceKey]} /></h2>
+          <p className="service-intro">{content.intro}</p>
+        </header>
         {content.signs && (
           <ul className="service-signs">{content.signs.map((sign) => <li key={sign}>{sign}</li>)}</ul>
         )}
-        <p className="service-work">{content.work}</p>
-        <div className="service-footer">
-          <p>{content.note}</p>
-          <button type="button" onClick={() => onContact(serviceKey)}>Обсудить запрос <span aria-hidden="true">→</span></button>
+        <div className="service-bottom">
+          <p className="service-work">{content.work}</p>
+          <div className="service-footer">
+            <p>{content.note}</p>
+            <button type="button" onClick={() => onContact(serviceKey)}>Обсудить запрос <span aria-hidden="true">→</span></button>
+          </div>
         </div>
       </section>
     </div>
@@ -417,7 +448,7 @@ export function MethodDrawer({ methodKey, onClose, onDiscuss }: { methodKey: Met
         <button ref={closeButton} className="method-close" type="button" onClick={onClose} aria-label="Закрыть описание метода">×</button>
         <div className="method-drawer-content">
           <p className="eyebrow">Метод работы · {content.short}</p>
-          <h2 id={`method-title-${methodKey}`}>{content.title}</h2>
+          <h2 id={`method-title-${methodKey}`}><AccentTitle text={content.title} accent={methodAccent[methodKey]} /></h2>
           <p className="method-subtitle">{content.subtitle}</p>
           <p className="method-lead">{content.lead}</p>
           <div className="method-points">
