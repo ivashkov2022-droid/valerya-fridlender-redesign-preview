@@ -1,4 +1,8 @@
+"use client";
+
+import { useCallback, useState } from "react";
 import FontLab from "./font-lab";
+import { LeadForm, LeadFormKey, LeadModal, MethodDrawer, MethodKey } from "./lead-funnels";
 
 const trustPoints = [
   { title: "7 лет практики", text: "1 407 проведённых сессий в индивидуальном формате" },
@@ -8,39 +12,53 @@ const trustPoints = [
 
 const services = [
   {
+    key: "individual-therapy" as LeadFormKey,
     title: "Индивидуальная терапия",
     text: "Тревога, хроническое напряжение, жизненные кризисы и состояния, с которыми не удаётся справиться привычными способами.",
-    image: "/images/tild3830-3162-4235-b462-373165303535__img_7743.jpg",
+    image: "images/tild3830-3162-4235-b462-373165303535__img_7743.jpg",
   },
   {
+    key: "trauma-experience" as LeadFormKey,
     title: "Травматический опыт",
     text: "События прошлого, которые до сих пор вызывают сильные эмоциональные или телесные реакции и влияют на решения.",
-    image: "/images/tild3332-3462-4231-b334-656163366338__5190700468546954841.jpg",
+    image: "images/tild3332-3462-4231-b334-656163366338__5190700468546954841.jpg",
   },
   {
+    key: "self-relationship" as LeadFormKey,
     title: "Отношения с собой",
     text: "Самокритика, стыд, внутренние конфликты, зависимость от оценки и ощущение, что вы живёте не свою жизнь.",
-    image: "/images/tild3438-3931-4264-a439-386266626535__img_20260220_160404.jpg",
+    image: "images/tild3438-3931-4264-a439-386266626535__img_20260220_160404.jpg",
   },
   {
+    key: "relationships" as LeadFormKey,
     title: "Отношения с другими",
     text: "Повторяющиеся сценарии в близких отношениях, сложность говорить о своих потребностях и удерживать границы.",
-    image: "/images/tild3136-3636-4338-a538-346363396133__5242600385204131198.jpg",
+    image: "images/tild3136-3636-4338-a538-346363396133__5242600385204131198.jpg",
   },
+];
+
+const formats: { key: LeadFormKey; title: string; text: string; price: string }[] = [
+  { key: "diagnostic", title: "Диагностика", text: "30 минут · краткий разбор ситуации", price: "0 ₽" },
+  { key: "single-session", title: "1 сессия", text: "60 минут · работа с запросом", price: "10 000 ₽" },
+  { key: "three-sessions", title: "3 сессии", text: "3 × 60 минут · скидка 20%", price: "24 000 ₽" },
+  { key: "five-sessions", title: "5 сессий", text: "5 × 60 минут · скидка 30%", price: "35 000 ₽" },
 ];
 
 const methods = [
   {
+    key: "ifs" as MethodKey,
     title: "IFS",
     subtitle: "Система внутренней семьи",
     text: "Работа с внутренними частями, которые спорят между собой, защищают привычные решения или удерживают от изменений.",
   },
   {
+    key: "emdr" as MethodKey,
     title: "EMDR",
     subtitle: "Переработка травматического опыта",
     text: "Структурированный метод переработки травматических воспоминаний и связанных с ними эмоциональных и телесных реакций.",
   },
   {
+    key: "imtt" as MethodKey,
     title: "ImTT",
     subtitle: "Трансформация образов",
     text: "Работа с образами, связанными с травматическим опытом, стыдом, виной и эмоциональной болью, без подробного пересказа события.",
@@ -60,6 +78,11 @@ const faqs = [
 ];
 
 export default function Home() {
+  const [activeForm, setActiveForm] = useState<LeadFormKey | null>(null);
+  const [activeMethod, setActiveMethod] = useState<MethodKey | null>(null);
+  const closeForm = useCallback(() => setActiveForm(null), []);
+  const closeMethod = useCallback(() => setActiveMethod(null), []);
+
   return (
     <main>
       <div className="info-bar">
@@ -80,18 +103,18 @@ export default function Home() {
           <a href="#formats">Стоимость</a>
           <a href="#contact">Контакты</a>
         </nav>
-        <a className="nav-cta" href="#contact">Начать работу <span aria-hidden="true">⟶</span></a>
+        <button className="nav-cta lead-trigger" type="button" onClick={() => setActiveForm("header-start")}>Начать работу <span aria-hidden="true">⟶</span></button>
       </header>
 
       <section className="hero" id="top">
-        <img className="hero-image" src="/images/tild3534-6531-4764-a535-323831336663__img_0752.jpg" alt="Психолог Валерия Фридлендер" width="1680" height="1120" fetchPriority="high" />
+        <img className="hero-image" src="images/tild3534-6531-4764-a535-323831336663__img_0752.jpg" alt="Психолог Валерия Фридлендер" width="1680" height="1120" fetchPriority="high" />
         <div className="hero-shade" aria-hidden="true" />
         <div className="hero-content">
           <h1>Валерия<br />Фридлендер</h1>
           <p className="hero-label">Психолог в Санкт-Петербурге и онлайн</p>
           <p className="hero-script">Психологическая работа без универсальных рецептов и лишних обещаний.</p>
           <p className="hero-text">Работаю с тревогой, последствиями травматического опыта, внутренними конфликтами и повторяющимися сценариями в отношениях.</p>
-          <a className="button button-light" href="#contact">Записаться на консультацию</a>
+          <button className="button button-light lead-trigger" type="button" onClick={() => setActiveForm("hero-consultation")}>Записаться на консультацию</button>
         </div>
       </section>
 
@@ -100,13 +123,13 @@ export default function Home() {
       </section>
 
       <section className="intro-split section-shell">
-        <div className="intro-photo"><img src="/images/valeria-intro-5943.webp" alt="Психолог Валерия Фридлендер" width="1600" height="2399" loading="lazy" /></div>
+        <div className="intro-photo"><img src="images/valeria-intro-5943.webp" alt="Психолог Валерия Фридлендер" width="1600" height="2399" loading="lazy" /></div>
         <div className="intro-copy">
           <p className="eyebrow">Когда стоит обратиться</p>
           <h2>Вы понимаете, что происходит. Но привычные решения больше не работают.</h2>
           <p>Можно многое понимать о себе, продолжать работать и выполнять обязательства — и при этом снова попадать в те же реакции, конфликты и решения.</p>
           <p>Терапия нужна там, где объяснения уже есть, а устойчивых изменений нет. Мы определяем, что поддерживает проблему, и работаем с этим.</p>
-          <a className="button button-outline" href="#contact">Обсудить запрос ⟶</a>
+          <button className="button button-outline lead-trigger" type="button" onClick={() => setActiveForm("discuss-request")}>Обсудить запрос ⟶</button>
         </div>
       </section>
 
@@ -121,7 +144,7 @@ export default function Home() {
           {services.map((service) => (
             <article className="service-card" key={service.title}>
               <img src={service.image} alt="" width="1280" height="854" loading="lazy" />
-              <div><h3>{service.title}</h3><p>{service.text}</p><a href="#contact">Подробнее</a></div>
+              <div><h3>{service.title}</h3><p>{service.text}</p><button type="button" onClick={() => setActiveForm(service.key)}>Подробнее</button></div>
             </article>
           ))}
         </div>
@@ -130,7 +153,7 @@ export default function Home() {
       <section className="promise-band">
         <p>На сессии не нужно доказывать, что вам действительно трудно.</p>
         <h2>Можно не знать правильных слов. Достаточно говорить о том, что происходит.</h2>
-        <a href="#contact">Записаться на первую сессию ⟶</a>
+        <button type="button" onClick={() => setActiveForm("first-session")}>Записаться на первую сессию ⟶</button>
       </section>
 
       <section className="methods-section section-shell" id="approach">
@@ -141,7 +164,11 @@ export default function Home() {
         </div>
         <div className="method-list">
           {methods.map((method, index) => (
-            <article key={method.title}><span>0{index + 1}</span><div><small>{method.subtitle}</small><h3>{method.title}</h3><p>{method.text}</p></div></article>
+            <article key={method.title}>
+              <span>0{index + 1}</span>
+              <div><small>{method.subtitle}</small><h3>{method.title}</h3><p>{method.text}</p></div>
+              <button className="method-open" type="button" onClick={() => setActiveMethod(method.key)} aria-label={`Подробнее о методе ${method.title}`}><span aria-hidden="true">⟶</span></button>
+            </article>
           ))}
         </div>
       </section>
@@ -152,9 +179,9 @@ export default function Home() {
           <h2>Валерия<br /><em>Фридлендер.</em></h2>
           <p className="about-lead">Практический психолог. Семь лет веду частную практику, работаю с травматическим опытом, тревогой и внутренними конфликтами.</p>
           <p>2 580 часов профессионального обучения и 1 407 проведённых сессий. В подготовке — практическая психология, психология субличностей и травмы, IFS, EMDR и ImTT.</p>
-          <a className="button button-outline" href="#contact">Записаться на встречу ⟶</a>
+          <button className="button button-outline lead-trigger" type="button" onClick={() => setActiveForm("about-meeting")}>Записаться на встречу ⟶</button>
         </div>
-        <div className="about-photo"><img src="/images/tild6461-6666-4637-b236-366364393738__img_7708.jpg" alt="Валерия Фридлендер" width="1680" height="2240" loading="lazy" /></div>
+        <div className="about-photo"><img src="images/tild6461-6666-4637-b236-366364393738__img_7708.jpg" alt="Валерия Фридлендер" width="1680" height="2240" loading="lazy" /></div>
       </section>
 
       <section className="process-section section-shell">
@@ -171,10 +198,12 @@ export default function Home() {
         <div className="formats-inner section-shell">
           <div className="formats-heading"><p className="eyebrow eyebrow-light">Форматы и стоимость</p><h2>Онлайн-сессии.</h2><p>Разовая консультация или пакет встреч для последовательной работы с запросом.</p></div>
           <div className="price-list">
-            <article><span>Диагностика</span><small>30 минут · краткий разбор ситуации</small><strong>0 ₽</strong></article>
-            <article><span>1 сессия</span><small>60 минут · работа с запросом</small><strong>10 000 ₽</strong></article>
-            <article><span>3 сессии</span><small>3 × 60 минут · скидка 20%</small><strong>24 000 ₽</strong></article>
-            <article><span>5 сессий</span><small>5 × 60 минут · скидка 30%</small><strong>35 000 ₽</strong></article>
+            {formats.map((format) => (
+              <article key={format.key}>
+                <span>{format.title}</span><small>{format.text}</small><strong>{format.price}</strong>
+                <button type="button" onClick={() => setActiveForm(format.key)}>Выбрать формат ⟶</button>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -189,7 +218,7 @@ export default function Home() {
       <section className="contact-section" id="contact">
         <img
           className="contact-photo"
-          src="/images/tild3236-3363-4432-a238-353234313366__img_7710.jpg"
+          src="images/tild3236-3363-4432-a238-353234313366__img_7710.jpg"
           alt=""
           width="1680"
           height="2100"
@@ -201,7 +230,8 @@ export default function Home() {
           <p className="eyebrow eyebrow-light">Запись на сессию</p>
           <h2>Опишите запрос.<br /><em>Я отвечу лично.</em></h2>
           <p>В первом сообщении достаточно кратко написать, что происходит. Я отвечу на вопросы и предложу время для встречи.</p>
-          <div><a className="button button-light" href="https://t.me/Valeria_Fridlender">Написать в Telegram</a><a className="contact-link" href="https://wa.me/79111284444">WhatsApp ⟶</a></div>
+          <LeadForm formKey="contact" compact />
+          <div className="contact-alternatives"><span>Или напишите напрямую:</span><a className="contact-link" href="https://t.me/Valeria_Fridlender">Telegram</a><a className="contact-link" href="https://wa.me/79111284444">WhatsApp ⟶</a></div>
         </div>
       </section>
 
@@ -210,7 +240,7 @@ export default function Home() {
           <div className="footer-intro">
             <div className="footer-brand"><span>Валерия Фридлендер</span><small>практический психолог</small></div>
             <p>Индивидуальная психологическая работа онлайн и в Санкт-Петербурге.</p>
-            <a className="footer-button" href="https://t.me/Valeria_Fridlender">Начать работу ⟶</a>
+            <button className="footer-button lead-trigger" type="button" onClick={() => setActiveForm("footer-start")}>Начать работу ⟶</button>
           </div>
 
           <div className="footer-column">
@@ -243,9 +273,11 @@ export default function Home() {
 
         <div className="footer-bottom">
           <span>© 2026 Валерия Фридлендер</span>
-          <div><a href="/privacy-policy">Политика конфиденциальности</a><a href="/personal-data-consent">Согласие на обработку данных</a></div>
+          <div><a href="privacy-policy.html">Политика конфиденциальности</a><a href="personal-data-consent.html">Согласие на обработку данных</a></div>
         </div>
       </footer>
+      {activeMethod && <MethodDrawer methodKey={activeMethod} onClose={closeMethod} onDiscuss={(formKey) => { setActiveMethod(null); setActiveForm(formKey); }} />}
+      {activeForm && <LeadModal formKey={activeForm} onClose={closeForm} />}
       <FontLab />
     </main>
   );
