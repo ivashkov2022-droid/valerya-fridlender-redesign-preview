@@ -1,4 +1,4 @@
-import { cp, mkdir, rm, writeFile } from "node:fs/promises";
+import { access, cp, mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const source = path.resolve(process.argv[2] || "dist/client");
@@ -21,7 +21,18 @@ home = home
   .replace(/\b(src|href)="\/(?!\/)/gi, '$1="')
   .replace(/\\"\/_next\//g, '\\"_next/');
 
+const assetRefs = [...home.matchAll(/(?:src|href)="(_next\/[^"?#]+)/g)].map((match) => match[1]);
+if (assetRefs.length === 0) {
+  throw new Error("Rendered home page does not reference any built assets");
+}
+for (const assetRef of new Set(assetRefs)) {
+  try {
+    await access(path.join(target, assetRef));
+  } catch {
+    throw new Error(`Rendered home page references a missing build asset: ${assetRef}`);
+  }
+}
+
 await writeFile(path.join(target, "index.html"), home, "utf8");
 await writeFile(path.join(target, ".nojekyll"), "", "utf8");
 console.log(`Prepared interactive server release in ${target}`);
-
