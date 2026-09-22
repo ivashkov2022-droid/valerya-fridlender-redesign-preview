@@ -603,7 +603,7 @@ body.page-locked { overscroll-behavior: none; }
 .lead-form-note { margin: -3px 0 0; font-size: 8px; line-height: 1.45; opacity: 0.65; }
 .lead-honeypot { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap !important; }
 
-.service-dialog { position: relative; width: min(700px, 100%); max-height: calc(100dvh - 36px); padding: 46px 52px 36px; overflow: hidden; background: var(--blue-light); color: var(--navy); box-shadow: 0 34px 90px rgba(4,11,27,0.34); animation: serviceDialogIn 400ms cubic-bezier(.2,.78,.22,1) both; }
+.service-dialog { position: relative; width: min(700px, 100%); max-height: calc(100dvh - 36px); padding: 46px 52px 36px; overflow: hidden; background: var(--paper); color: var(--navy); box-shadow: 0 34px 90px rgba(4,11,27,0.34); animation: serviceDialogIn 400ms cubic-bezier(.2,.78,.22,1) both; }
 .service-dialog h2 { max-width: 610px; margin: 11px 0 14px; font: 400 clamp(38px, 4vw, 54px)/0.98 var(--font-display); }
 .service-intro { max-width: 610px; font-size: 13px; line-height: 1.55; }
 .service-signs { margin: 19px 0; padding: 16px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); list-style: none; }
@@ -617,7 +617,7 @@ body.page-locked { overscroll-behavior: none; }
 .service-footer button:hover span { transform: translateX(4px); }
 
 .method-drawer-shell { position: fixed; z-index: 118; inset: 0; padding: 18px; display: flex; align-items: center; justify-content: flex-end; overflow: hidden; overscroll-behavior: none; touch-action: none; background: rgba(12,20,43,0.42); backdrop-filter: blur(5px); animation: leadFadeIn 240ms ease both; }
-.method-drawer { position: relative; width: min(510px, 100%); max-height: calc(100dvh - 36px); overflow: hidden; background: var(--cream); color: var(--navy); box-shadow: -24px 20px 70px rgba(8,16,37,0.24); animation: methodDrawerIn 440ms cubic-bezier(.2,.78,.22,1) both; }
+.method-drawer { position: relative; width: min(510px, 100%); max-height: calc(100dvh - 36px); overflow: hidden; background: var(--paper); color: var(--navy); box-shadow: -24px 20px 70px rgba(8,16,37,0.24); animation: methodDrawerIn 440ms cubic-bezier(.2,.78,.22,1) both; }
 .method-drawer-content { position: relative; z-index: 2; padding: 48px 48px 34px; }
 .method-close { position: absolute; z-index: 4; top: 13px; right: 15px; width: 34px; height: 34px; display: grid; place-items: center; border: 0; background: transparent; color: var(--navy); font: 300 26px/1 Arial, sans-serif; cursor: pointer; opacity: 0.68; transition: transform 220ms ease, opacity 180ms ease; }
 .method-close:hover { transform: rotate(8deg); }
