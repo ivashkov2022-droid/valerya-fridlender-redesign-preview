@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import FontLab from "./font-lab";
-import { LeadForm, LeadFormKey, LeadModal, MethodDrawer, MethodKey } from "./lead-funnels";
+import { LeadFormKey, LeadModal, MethodDrawer, MethodKey, ServiceKey, ServiceModal } from "./lead-funnels";
 
 const trustPoints = [
   { title: "7 лет практики", text: "1 407 проведённых сессий в индивидуальном формате" },
@@ -12,36 +12,36 @@ const trustPoints = [
 
 const services = [
   {
-    key: "individual-therapy" as LeadFormKey,
+    key: "individual-therapy" as ServiceKey,
     title: "Индивидуальная терапия",
     text: "Тревога, хроническое напряжение, жизненные кризисы и состояния, с которыми не удаётся справиться привычными способами.",
     image: "images/tild3830-3162-4235-b462-373165303535__img_7743.jpg",
   },
   {
-    key: "trauma-experience" as LeadFormKey,
+    key: "trauma-experience" as ServiceKey,
     title: "Травматический опыт",
     text: "События прошлого, которые до сих пор вызывают сильные эмоциональные или телесные реакции и влияют на решения.",
     image: "images/tild3332-3462-4231-b334-656163366338__5190700468546954841.jpg",
   },
   {
-    key: "self-relationship" as LeadFormKey,
+    key: "self-relationship" as ServiceKey,
     title: "Отношения с собой",
     text: "Самокритика, стыд, внутренние конфликты, зависимость от оценки и ощущение, что вы живёте не свою жизнь.",
     image: "images/tild3438-3931-4264-a439-386266626535__img_20260220_160404.jpg",
   },
   {
-    key: "relationships" as LeadFormKey,
+    key: "relationships" as ServiceKey,
     title: "Отношения с другими",
     text: "Повторяющиеся сценарии в близких отношениях, сложность говорить о своих потребностях и удерживать границы.",
     image: "images/tild3136-3636-4338-a538-346363396133__5242600385204131198.jpg",
   },
 ];
 
-const formats: { key: LeadFormKey; title: string; text: string; price: string }[] = [
-  { key: "diagnostic", title: "Диагностика", text: "30 минут · краткий разбор ситуации", price: "0 ₽" },
-  { key: "single-session", title: "1 сессия", text: "60 минут · работа с запросом", price: "10 000 ₽" },
-  { key: "three-sessions", title: "3 сессии", text: "3 × 60 минут · скидка 20%", price: "24 000 ₽" },
-  { key: "five-sessions", title: "5 сессий", text: "5 × 60 минут · скидка 30%", price: "35 000 ₽" },
+const formats = [
+  { title: "Диагностика", text: "30 минут · краткий разбор ситуации", price: "0 ₽" },
+  { title: "1 сессия", text: "60 минут · работа с запросом", price: "10 000 ₽" },
+  { title: "3 сессии", text: "3 × 60 минут · скидка 20%", price: "24 000 ₽" },
+  { title: "5 сессий", text: "5 × 60 минут · скидка 30%", price: "35 000 ₽" },
 ];
 
 const methods = [
@@ -79,8 +79,10 @@ const faqs = [
 
 export default function Home() {
   const [activeForm, setActiveForm] = useState<LeadFormKey | null>(null);
+  const [activeService, setActiveService] = useState<ServiceKey | null>(null);
   const [activeMethod, setActiveMethod] = useState<MethodKey | null>(null);
   const closeForm = useCallback(() => setActiveForm(null), []);
+  const closeService = useCallback(() => setActiveService(null), []);
   const closeMethod = useCallback(() => setActiveMethod(null), []);
 
   return (
@@ -144,7 +146,7 @@ export default function Home() {
           {services.map((service) => (
             <article className="service-card" key={service.title}>
               <img src={service.image} alt="" width="1280" height="854" loading="lazy" />
-              <div><h3>{service.title}</h3><p>{service.text}</p><button type="button" onClick={() => setActiveForm(service.key)}>Подробнее</button></div>
+              <div><h3>{service.title}</h3><p>{service.text}</p><button type="button" onClick={() => setActiveService(service.key)}>Подробнее <span aria-hidden="true">→</span></button></div>
             </article>
           ))}
         </div>
@@ -167,7 +169,7 @@ export default function Home() {
             <article key={method.title}>
               <span>0{index + 1}</span>
               <div><small>{method.subtitle}</small><h3>{method.title}</h3><p>{method.text}</p></div>
-              <button className="method-open" type="button" onClick={() => setActiveMethod(method.key)} aria-label={`Подробнее о методе ${method.title}`}><span aria-hidden="true">⟶</span></button>
+              <button className="method-open" type="button" onClick={() => setActiveMethod(method.key)} aria-label={`Подробнее о методе ${method.title}`}><span aria-hidden="true">↗</span></button>
             </article>
           ))}
         </div>
@@ -199,9 +201,8 @@ export default function Home() {
           <div className="formats-heading"><p className="eyebrow eyebrow-light">Форматы и стоимость</p><h2>Онлайн-сессии.</h2><p>Разовая консультация или пакет встреч для последовательной работы с запросом.</p></div>
           <div className="price-list">
             {formats.map((format) => (
-              <article key={format.key}>
+              <article key={format.title}>
                 <span>{format.title}</span><small>{format.text}</small><strong>{format.price}</strong>
-                <button type="button" onClick={() => setActiveForm(format.key)}>Выбрать формат ⟶</button>
               </article>
             ))}
           </div>
@@ -230,8 +231,7 @@ export default function Home() {
           <p className="eyebrow eyebrow-light">Запись на сессию</p>
           <h2>Опишите запрос.<br /><em>Я отвечу лично.</em></h2>
           <p>В первом сообщении достаточно кратко написать, что происходит. Я отвечу на вопросы и предложу время для встречи.</p>
-          <LeadForm formKey="contact" compact />
-          <div className="contact-alternatives"><span>Или напишите напрямую:</span><a className="contact-link" href="https://t.me/Valeria_Fridlender">Telegram</a><a className="contact-link" href="https://wa.me/79111284444">WhatsApp ⟶</a></div>
+          <div className="contact-actions"><button className="button button-light" type="button" onClick={() => setActiveForm("contact")}>Оставить заявку</button><a className="contact-link" href="https://t.me/Valeria_Fridlender">Telegram</a><a className="contact-link" href="https://wa.me/79111284444">WhatsApp ⟶</a></div>
         </div>
       </section>
 
@@ -277,6 +277,7 @@ export default function Home() {
         </div>
       </footer>
       {activeMethod && <MethodDrawer methodKey={activeMethod} onClose={closeMethod} onDiscuss={(formKey) => { setActiveMethod(null); setActiveForm(formKey); }} />}
+      {activeService && <ServiceModal serviceKey={activeService} onClose={closeService} onContact={(formKey) => { setActiveService(null); setActiveForm(formKey); }} />}
       {activeForm && <LeadModal formKey={activeForm} onClose={closeForm} />}
       <FontLab />
     </main>

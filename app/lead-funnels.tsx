@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, type RefObject, useEffect, useRef, useState } from "react";
 
 export type LeadFormKey =
   | "header-start"
@@ -23,6 +23,12 @@ export type LeadFormKey =
   | "method-imtt";
 
 export type MethodKey = "ifs" | "emdr" | "imtt";
+
+export type ServiceKey =
+  | "individual-therapy"
+  | "trauma-experience"
+  | "self-relationship"
+  | "relationships";
 
 type LeadContent = {
   eyebrow: string;
@@ -230,6 +236,60 @@ function readTracking() {
   return values;
 }
 
+function useLockedPageScroll(onClose: () => void, closeButton: RefObject<HTMLButtonElement | null>) {
+  useEffect(() => {
+    const root = document.documentElement;
+    const body = document.body;
+    const scrollY = window.scrollY;
+    const scrollbarWidth = window.innerWidth - root.clientWidth;
+    const previous = {
+      rootOverflow: root.style.overflow,
+      rootOverscroll: root.style.overscrollBehavior,
+      rootScrollBehavior: root.style.scrollBehavior,
+      bodyOverflow: body.style.overflow,
+      bodyOverscroll: body.style.overscrollBehavior,
+      bodyPosition: body.style.position,
+      bodyTop: body.style.top,
+      bodyWidth: body.style.width,
+      bodyPaddingRight: body.style.paddingRight,
+    };
+
+    root.classList.add("page-locked");
+    body.classList.add("page-locked");
+    root.style.overflow = "hidden";
+    root.style.overscrollBehavior = "none";
+    root.style.scrollBehavior = "auto";
+    body.style.overflow = "hidden";
+    body.style.overscrollBehavior = "none";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    if (scrollbarWidth > 0) body.style.paddingRight = `${scrollbarWidth}px`;
+
+    closeButton.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      root.classList.remove("page-locked");
+      body.classList.remove("page-locked");
+      root.style.overflow = previous.rootOverflow;
+      root.style.overscrollBehavior = previous.rootOverscroll;
+      body.style.overflow = previous.bodyOverflow;
+      body.style.overscrollBehavior = previous.bodyOverscroll;
+      body.style.position = previous.bodyPosition;
+      body.style.top = previous.bodyTop;
+      body.style.width = previous.bodyWidth;
+      body.style.paddingRight = previous.bodyPaddingRight;
+      window.scrollTo(0, scrollY);
+      root.style.scrollBehavior = previous.rootScrollBehavior;
+    };
+  }, [closeButton, onClose]);
+}
+
 export function LeadForm({ formKey, compact = false }: { formKey: LeadFormKey; compact?: boolean }) {
   const content = leadContent[formKey];
   const [token, setToken] = useState("");
@@ -303,43 +363,42 @@ export function LeadForm({ formKey, compact = false }: { formKey: LeadFormKey; c
 export function LeadModal({ formKey, onClose }: { formKey: LeadFormKey; onClose: () => void }) {
   const content = leadContent[formKey];
   const closeButton = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeButton.current?.focus();
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [onClose]);
+  useLockedPageScroll(onClose, closeButton);
 
   return (
     <div className="lead-modal" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
       <section className="lead-dialog" role="dialog" aria-modal="true" aria-labelledby={`lead-title-${formKey}`}>
         <button ref={closeButton} className="lead-close" type="button" onClick={onClose} aria-label="Закрыть форму">×</button>
-        <div className="lead-dialog-copy">
-          <p className="eyebrow">{content.eyebrow}</p>
-          <h2 id={`lead-title-${formKey}`}>{content.title}</h2>
-          <p className="lead-dialog-intro">{content.intro}</p>
-          {content.signs && (
-            <div className="lead-signs">
-              <small>Возможно, вам знакомо:</small>
-              <ul>{content.signs.map((sign) => <li key={sign}>{sign}</li>)}</ul>
-            </div>
-          )}
-          <p className="lead-dialog-work">{content.work}</p>
-          <p className="lead-dialog-note">{content.note}</p>
-        </div>
         <div className="lead-dialog-form">
-          <p className="lead-form-kicker">Написать Валерии</p>
-          <h3>С чего можно начать</h3>
-          <p>Оставьте удобный контакт и коротко опишите ситуацию. Запрос можно уточнить позже.</p>
-          <LeadForm formKey={formKey} />
+          <p className="lead-form-kicker">{content.eyebrow}</p>
+          <h2 id={`lead-title-${formKey}`}>Написать Валерии</h2>
+          <p>Оставьте удобный контакт и несколько слов о ситуации. Запрос можно уточнить позже.</p>
+          <LeadForm formKey={formKey} compact />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export function ServiceModal({ serviceKey, onClose, onContact }: { serviceKey: ServiceKey; onClose: () => void; onContact: (formKey: LeadFormKey) => void }) {
+  const content = leadContent[serviceKey];
+  const closeButton = useRef<HTMLButtonElement>(null);
+  useLockedPageScroll(onClose, closeButton);
+
+  return (
+    <div className="service-modal" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+      <section className="service-dialog" role="dialog" aria-modal="true" aria-labelledby={`service-title-${serviceKey}`}>
+        <button ref={closeButton} className="service-close" type="button" onClick={onClose} aria-label="Закрыть описание">×</button>
+        <p className="eyebrow">{content.eyebrow}</p>
+        <h2 id={`service-title-${serviceKey}`}>{content.title}</h2>
+        <p className="service-intro">{content.intro}</p>
+        {content.signs && (
+          <ul className="service-signs">{content.signs.map((sign) => <li key={sign}>{sign}</li>)}</ul>
+        )}
+        <p className="service-work">{content.work}</p>
+        <div className="service-footer">
+          <p>{content.note}</p>
+          <button type="button" onClick={() => onContact(serviceKey)}>Обсудить запрос <span aria-hidden="true">→</span></button>
         </div>
       </section>
     </div>
@@ -349,20 +408,7 @@ export function LeadModal({ formKey, onClose }: { formKey: LeadFormKey; onClose:
 export function MethodDrawer({ methodKey, onClose, onDiscuss }: { methodKey: MethodKey; onClose: () => void; onDiscuss: (formKey: LeadFormKey) => void }) {
   const content = methodContent[methodKey];
   const closeButton = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeButton.current?.focus();
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [onClose]);
+  useLockedPageScroll(onClose, closeButton);
 
   return (
     <div className="method-drawer-shell" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
