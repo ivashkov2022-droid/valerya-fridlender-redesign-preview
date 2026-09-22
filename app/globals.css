@@ -292,11 +292,11 @@ h1, h2, h3, p { margin-top: 0; }
 .section-description { max-width: 670px; margin: 22px auto 0; font-size: 14px; }
 .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .service-card { min-width: 0; display: flex; flex-direction: column; background: var(--blue); color: white; }
-.service-card > img { width: 100%; height: 240px; object-fit: cover; }
+.service-card > img { width: 100%; height: 258px; object-fit: cover; }
 .service-card:first-child > img { object-position: center top; }
 .service-card:nth-child(2) > img { object-position: 40% center; }
 .service-card:nth-child(3) > img { object-position: 50% center; }
-.service-card > div { min-height: 326px; padding: 25px 20px 24px; display: flex; flex-direction: column; }
+.service-card > div { min-height: 308px; padding: 25px 20px 24px; display: flex; flex-direction: column; }
 .service-card h3 {
   margin-bottom: 17px;
   font-family: "Cormorant Garamond", Georgia, serif;
@@ -395,10 +395,23 @@ h1, h2, h3, p { margin-top: 0; }
 .formats-heading h2 { margin-bottom: 21px; font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(56px, 6vw, 82px); font-weight: 400; line-height: 0.9; text-transform: uppercase; }
 .formats-heading > p:last-child { max-width: 440px; }
 .price-list { border-top: 1px solid rgba(255, 255, 255, 0.45); }
-.price-list article { padding: 23px 0; display: grid; grid-template-columns: 1fr 1fr auto; gap: 20px; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.45); }
+.price-list article { position: relative; padding: 23px 0; display: grid; grid-template-columns: 1fr 1fr auto; gap: 20px; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.45); }
 .price-list span { font-family: "Cormorant Garamond", Georgia, serif; font-size: 30px; font-style: italic; line-height: 1; }
 .price-list small { font-size: 11px; }
-.price-list strong { font-family: "Cormorant Garamond", Georgia, serif; font-size: 27px; font-weight: 400; white-space: nowrap; }
+.price-list strong { font-family: "Cormorant Garamond", Georgia, serif; font-size: 27px; font-weight: 400; white-space: nowrap; transition: opacity 220ms ease, transform 260ms ease; }
+.format-select { position: absolute; z-index: 2; inset: 0; padding: 0; border: 0; background: transparent; color: var(--navy); cursor: pointer; }
+.format-select > span { position: absolute; top: 50%; right: 0; width: 72px; height: 72px; display: grid; place-content: center; border-radius: 50%; background: var(--cream); box-shadow: 0 12px 28px rgba(13,25,57,0.18); opacity: 0; transform: translateY(-50%) scale(0.72); transition: opacity 220ms ease, transform 340ms cubic-bezier(.2,.78,.22,1); }
+.format-select b { font: 600 8px/1 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; }
+.format-option:hover strong,
+.format-option:focus-within strong { opacity: 0; transform: translateX(-12px); }
+.format-option:hover .format-select > span,
+.format-select:focus-visible > span { opacity: 1; transform: translateY(-50%) scale(1); }
+.format-select:focus-visible { outline: none; }
+.format-select:focus-visible > span { box-shadow: 0 0 0 2px white, 0 12px 28px rgba(13,25,57,0.22); }
+
+@media (hover: none) {
+  .format-select { display: none; }
+}
 
 .faq-section { padding-top: 98px; padding-bottom: 105px; display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 80px; }
 .faq-title h2 { font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(56px, 6vw, 82px); font-weight: 400; line-height: 0.9; text-transform: uppercase; }

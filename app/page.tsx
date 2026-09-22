@@ -37,11 +37,11 @@ const services = [
   },
 ];
 
-const formats = [
-  { title: "Диагностика", text: "30 минут · краткий разбор ситуации", price: "0 ₽" },
-  { title: "1 сессия", text: "60 минут · работа с запросом", price: "10 000 ₽" },
-  { title: "3 сессии", text: "3 × 60 минут · скидка 20%", price: "24 000 ₽" },
-  { title: "5 сессий", text: "5 × 60 минут · скидка 30%", price: "35 000 ₽" },
+const formats: { key: LeadFormKey; title: string; text: string; price: string }[] = [
+  { key: "diagnostic", title: "Диагностика", text: "30 минут · краткий разбор ситуации", price: "0 ₽" },
+  { key: "single-session", title: "1 сессия", text: "60 минут · работа с запросом", price: "10 000 ₽" },
+  { key: "three-sessions", title: "3 сессии", text: "3 × 60 минут · скидка 20%", price: "24 000 ₽" },
+  { key: "five-sessions", title: "5 сессий", text: "5 × 60 минут · скидка 30%", price: "35 000 ₽" },
 ];
 
 const methods = [
@@ -146,7 +146,7 @@ export default function Home() {
           {services.map((service) => (
             <article className="service-card" key={service.title}>
               <img src={service.image} alt="" width="1280" height="854" loading="lazy" />
-              <div><h3>{service.title}</h3><p>{service.text}</p><button type="button" onClick={() => setActiveService(service.key)}>Подробнее <span aria-hidden="true">→</span></button></div>
+              <div><h3>{service.title}</h3><p>{service.text}</p><button type="button" onClick={() => setActiveService(service.key)}>Подробнее</button></div>
             </article>
           ))}
         </div>
@@ -201,8 +201,11 @@ export default function Home() {
           <div className="formats-heading"><p className="eyebrow eyebrow-light">Форматы и стоимость</p><h2>Онлайн-сессии.</h2><p>Разовая консультация или пакет встреч для последовательной работы с запросом.</p></div>
           <div className="price-list">
             {formats.map((format) => (
-              <article key={format.title}>
+              <article className="format-option" key={format.key}>
                 <span>{format.title}</span><small>{format.text}</small><strong>{format.price}</strong>
+                <button className="format-select" type="button" onClick={() => setActiveForm(format.key)} aria-label={`Выбрать формат: ${format.title}`}>
+                  <span aria-hidden="true"><b>Выбрать</b></span>
+                </button>
               </article>
             ))}
           </div>
@@ -231,7 +234,7 @@ export default function Home() {
           <p className="eyebrow eyebrow-light">Запись на сессию</p>
           <h2>Опишите запрос.<br /><em>Я отвечу лично.</em></h2>
           <p>В первом сообщении достаточно кратко написать, что происходит. Я отвечу на вопросы и предложу время для встречи.</p>
-          <div className="contact-actions"><button className="button button-light" type="button" onClick={() => setActiveForm("contact")}>Оставить заявку</button><a className="contact-link" href="https://t.me/Valeria_Fridlender">Telegram</a><a className="contact-link" href="https://wa.me/79111284444">WhatsApp ⟶</a></div>
+          <div className="contact-actions"><button className="button button-light" type="button" onClick={() => setActiveForm("contact")}>Оставить заявку</button><a className="contact-link" href="https://t.me/Valeria_Fridlender">Telegram ⟶</a></div>
         </div>
       </section>
 
