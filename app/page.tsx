@@ -120,7 +120,7 @@ export default function Home() {
   useEffect(() => {
     const marker = new URLSearchParams(window.location.search).get("marker");
     const root = pageRoot.current;
-    if (!root || (marker !== "twig-a" && marker !== "twig-b" && marker !== "twig-c")) return;
+    if (!root || (marker !== "twig-a" && marker !== "twig-b" && marker !== "twig-c" && marker !== "none")) return;
 
     root.dataset.markerPreview = marker;
     return () => { delete root.dataset.markerPreview; };

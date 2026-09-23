@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 12" width="32" height="12" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity=".5" aria-hidden="true">
-  <path vector-effect="non-scaling-stroke" d="M.75 7.45 C9 7.45 16.25 7.15 22.2 6.55 C26.15 6.15 29 5.2 31.25 4.15"/>
-  <path vector-effect="non-scaling-stroke" d="M22.1 6.56 C21.05 4.1 19.15 3.1 16.95 3.55 C17.75 5.6 19.55 6.7 22.1 6.56"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 14" width="36" height="14" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity=".5" aria-hidden="true">
+  <path vector-effect="non-scaling-stroke" d="M.75 7.95 C5.15 9.1 8.75 8.55 12.6 7.15 C16.4 5.75 19.55 5.95 23.05 6.55 C27 7.2 30.9 6.25 35.25 4.5"/>
+  <path vector-effect="non-scaling-stroke" d="M12.55 7.15 C14 4.4 16.45 2.75 19.55 2.95"/>
+  <path vector-effect="non-scaling-stroke" d="M23.05 6.55 C24.45 8.65 26.7 9.75 29.25 9.25"/>
 </svg>
