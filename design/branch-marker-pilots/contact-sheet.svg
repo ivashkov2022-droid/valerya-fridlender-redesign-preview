@@ -4,11 +4,11 @@
   <g color="#202e56" font-family="Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="1.21">
     <g transform="translate(46 50)">
       <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity=".5">
-        <path d="M.75 10.75 C6.2 10.3 11.5 9.5 16.2 7.9 C21.4 6.1 26.8 4.1 35.25 2"/>
-        <path d="M15.9 8 C16.7 5.3 18.5 3.5 21 2.6 C20.4 5 18.8 7 16.2 7.8"/>
-        <path d="M23 5.5 C25.4 5.3 27.2 6.1 28.6 7.8 C26.5 7.3 24.8 6.6 23.1 5.7"/>
+        <path d="M.75 10.9 C5.9 10.5 10.8 9.6 15.2 7.8 C20.1 5.75 25.8 3.8 35.25 2.2"/>
+        <path d="M15 7.9 C15.9 5.25 17.65 3.1 20.6 1.6"/>
+        <path d="M23.7 4.7 C26.3 4.8 28.4 5.9 30.25 8.15"/>
       </g>
-      <text x="47" y="11" fill="currentColor">ВОПРОСЫ · ГЕРБАРИЙ</text>
+      <text x="47" y="11" fill="currentColor">ВОПРОСЫ · ДИКАЯ ЛИНИЯ</text>
     </g>
     <g transform="translate(46 116)">
       <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity=".5">
@@ -25,16 +25,16 @@
       </g>
       <text x="47" y="11" fill="currentColor">ВОПРОСЫ · ПАУЗА</text>
     </g>
-    <g transform="translate(46 248)"><text x="47" y="11" fill="currentColor">ВОПРОСЫ · БЕЗ МАРКЕРА</text></g>
+    <g transform="translate(46 248)"><text x="0" y="11" fill="currentColor">ВОПРОСЫ · БЕЗ МАРКЕРА</text></g>
   </g>
   <g transform="translate(460)" color="#fff" font-family="Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="1.21">
     <g transform="translate(46 50)">
       <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity=".5">
-        <path d="M.75 10.75 C6.2 10.3 11.5 9.5 16.2 7.9 C21.4 6.1 26.8 4.1 35.25 2"/>
-        <path d="M15.9 8 C16.7 5.3 18.5 3.5 21 2.6 C20.4 5 18.8 7 16.2 7.8"/>
-        <path d="M23 5.5 C25.4 5.3 27.2 6.1 28.6 7.8 C26.5 7.3 24.8 6.6 23.1 5.7"/>
+        <path d="M.75 10.9 C5.9 10.5 10.8 9.6 15.2 7.8 C20.1 5.75 25.8 3.8 35.25 2.2"/>
+        <path d="M15 7.9 C15.9 5.25 17.65 3.1 20.6 1.6"/>
+        <path d="M23.7 4.7 C26.3 4.8 28.4 5.9 30.25 8.15"/>
       </g>
-      <text x="47" y="11" fill="currentColor">ФОРМАТЫ · ГЕРБАРИЙ</text>
+      <text x="47" y="11" fill="currentColor">ФОРМАТЫ · ДИКАЯ ЛИНИЯ</text>
     </g>
     <g transform="translate(46 116)">
       <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity=".5">
@@ -51,6 +51,6 @@
       </g>
       <text x="47" y="11" fill="currentColor">ФОРМАТЫ · ПАУЗА</text>
     </g>
-    <g transform="translate(46 248)"><text x="47" y="11" fill="currentColor">ФОРМАТЫ · БЕЗ МАРКЕРА</text></g>
+    <g transform="translate(46 248)"><text x="0" y="11" fill="currentColor">ФОРМАТЫ · БЕЗ МАРКЕРА</text></g>
   </g>
 </svg>
