@@ -77,6 +77,22 @@ const faqs = [
   ["Можно ли заниматься онлайн?", "Да. Онлайн — основной формат практики. Для сессии понадобятся стабильная связь и место, где вы сможете говорить без посторонних."],
 ];
 
+function positionFormatPrompt(button: HTMLButtonElement, clientX: number, clientY: number) {
+  const bounds = button.getBoundingClientRect();
+  const promptSize = 62;
+  const inset = 4;
+  const offset = 10;
+  const price = button.parentElement?.querySelector("strong")?.getBoundingClientRect();
+  const availableBeforePrice = price ? price.left - bounds.left - promptSize - 14 : bounds.width - promptSize - inset;
+  const maxX = Math.max(inset, Math.min(bounds.width - promptSize - inset, availableBeforePrice));
+  const x = Math.min(Math.max(clientX - bounds.left + offset, inset), maxX);
+  const y = Math.min(Math.max(clientY - bounds.top + offset, inset), bounds.height - promptSize - inset);
+
+  button.style.setProperty("--format-pointer-x", `${x}px`);
+  button.style.setProperty("--format-pointer-y", `${y}px`);
+  button.dataset.cursor = "true";
+}
+
 export default function Home() {
   const [activeForm, setActiveForm] = useState<LeadFormKey | null>(null);
   const [activeService, setActiveService] = useState<ServiceKey | null>(null);
@@ -114,8 +130,8 @@ export default function Home() {
         <div className="hero-content">
           <h1>Валерия<br />Фридлендер</h1>
           <p className="hero-label">Психолог в Санкт-Петербурге и онлайн</p>
-          <p className="hero-script">Психологическая работа без универсальных рецептов и лишних обещаний.</p>
-          <p className="hero-text">Работаю с тревогой, последствиями травматического опыта, внутренними конфликтами и повторяющимися сценариями в отношениях.</p>
+          <p className="hero-script">Психологическая работа без универсальных рецептов и лишних обещаний</p>
+          <p className="hero-text">Работаю с тревогой, последствиями травматического опыта, внутренними конфликтами и повторяющимися сценариями в отношениях</p>
           <button className="button button-light lead-trigger" type="button" onClick={() => setActiveForm("hero-consultation")}>Записаться на консультацию</button>
         </div>
       </section>
@@ -139,7 +155,7 @@ export default function Home() {
         <div className="section-heading centered-heading">
           <p className="eyebrow">Валерия Фридлендер · психологическая практика</p>
           <h2>Направления работы</h2>
-          <p className="section-script">Задача терапии — не бесконечно объяснять проблему, а увидеть, что её поддерживает.</p>
+          <p className="section-script">Задача терапии — не бесконечно объяснять проблему, а увидеть, что её поддерживает</p>
           <p className="section-description">Запрос не обязан быть сформулирован идеально. Достаточно описать, что происходит и что вы хотите изменить.</p>
         </div>
         <div className="service-grid">
@@ -161,7 +177,7 @@ export default function Home() {
       <section className="methods-section section-shell" id="approach">
         <div className="methods-intro">
           <p className="eyebrow">Методы работы</p>
-          <h2>Метод выбирается<br /><em>под задачу.</em></h2>
+          <h2>Метод выбирается<br /><em>под задачу</em></h2>
           <p>В работе использую IFS, EMDR и ImTT. Выбор метода зависит от запроса, состояния и того, как вы реагируете на процесс.</p>
         </div>
         <div className="method-list">
@@ -178,7 +194,7 @@ export default function Home() {
       <section className="about-section section-shell" id="about">
         <div className="about-copy">
           <p className="eyebrow">Обо мне</p>
-          <h2>Валерия<br /><em>Фридлендер.</em></h2>
+          <h2>Валерия<br /><em>Фридлендер</em></h2>
           <p className="about-lead">Практический психолог. Семь лет веду частную практику, работаю с травматическим опытом, тревогой и внутренними конфликтами.</p>
           <p>2 580 часов профессионального обучения и 1 407 проведённых сессий. В подготовке — практическая психология, психология субличностей и травмы, IFS, EMDR и ImTT.</p>
           <button className="button button-outline lead-trigger" type="button" onClick={() => setActiveForm("about-meeting")}>Записаться на встречу ⟶</button>
@@ -198,12 +214,26 @@ export default function Home() {
 
       <section className="formats-section" id="formats">
         <div className="formats-inner section-shell">
-          <div className="formats-heading"><p className="eyebrow eyebrow-light">Форматы и стоимость</p><h2>Онлайн-сессии.</h2><p>Разовая консультация или пакет встреч для последовательной работы с запросом.</p></div>
+          <div className="formats-heading"><p className="eyebrow eyebrow-light">Форматы и стоимость</p><h2>Онлайн-сессии</h2><p>Разовая консультация или пакет встреч для последовательной работы с запросом.</p></div>
           <div className="price-list">
             {formats.map((format) => (
               <article className="format-option" key={format.key}>
-                <span>{format.title}</span><small>{format.text}</small><strong>{format.price}</strong>
-                <button className="format-select" type="button" onClick={() => setActiveForm(format.key)} aria-label={`Выбрать формат: ${format.title}`}>
+                <span>{format.title}</span><small id={`${format.key}-details`}>{format.text}</small><strong id={`${format.key}-price`}>{format.price}</strong>
+                <button
+                  className="format-select"
+                  type="button"
+                  onPointerEnter={(event) => {
+                    if (event.pointerType === "mouse") positionFormatPrompt(event.currentTarget, event.clientX, event.clientY);
+                  }}
+                  onPointerMove={(event) => {
+                    if (event.pointerType === "mouse") positionFormatPrompt(event.currentTarget, event.clientX, event.clientY);
+                  }}
+                  onPointerLeave={(event) => { delete event.currentTarget.dataset.cursor; }}
+                  onPointerCancel={(event) => { delete event.currentTarget.dataset.cursor; }}
+                  onClick={() => setActiveForm(format.key)}
+                  aria-label={`Выбрать формат: ${format.title}`}
+                  aria-describedby={`${format.key}-details ${format.key}-price`}
+                >
                   <span aria-hidden="true"><b>Выбрать</b></span>
                 </button>
               </article>
