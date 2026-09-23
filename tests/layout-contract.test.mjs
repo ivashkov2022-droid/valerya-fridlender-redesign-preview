@@ -99,7 +99,8 @@ test("offers three transparent marker previews and a no-marker comparison withou
   assert.match(page, /new URLSearchParams\(window\.location\.search\)\.get\("marker"\)/);
   assert.match(page, /marker !== "twig-a" && marker !== "twig-b" && marker !== "twig-c" && marker !== "none"/);
   assert.match(page, /root\.dataset\.markerPreview = marker/);
-  assert.match(page, /<main ref=\{pageRoot\}>/);
+  assert.match(page, /return \(\) => \{ root\.dataset\.markerPreview = "twig-b"; \}/);
+  assert.match(page, /<main ref=\{pageRoot\} data-marker-preview="twig-b">/);
   assert.match(page, /<section className="faq-section section-shell" id="faq">/);
 
   assert.match(css, /\.eyebrow::before\s*\{[^}]*width:\s*32px\s*;[^}]*height:\s*1px\s*;[^}]*margin-right:\s*11px\s*;[^}]*background:\s*currentColor\s*;[^}]*opacity:\s*0\.5\s*;/);

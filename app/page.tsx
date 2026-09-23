@@ -123,7 +123,7 @@ export default function Home() {
     if (!root || (marker !== "twig-a" && marker !== "twig-b" && marker !== "twig-c" && marker !== "none")) return;
 
     root.dataset.markerPreview = marker;
-    return () => { delete root.dataset.markerPreview; };
+    return () => { root.dataset.markerPreview = "twig-b"; };
   }, []);
 
   useEffect(() => {
@@ -186,7 +186,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main ref={pageRoot}>
+    <main ref={pageRoot} data-marker-preview="twig-b">
       <div className="info-bar">
         <a href="tel:+79111284444">+7 911 128-44-44</a>
         <span>Онлайн по всему миру</span>
