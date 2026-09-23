@@ -52,15 +52,47 @@ test("uses only the approved local production fonts and preserves the approved s
   assert.match(css, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.service-grid\s*\{[^}]*minmax\(0,\s*1fr\)/);
 });
 
-test("keeps every external social link in a separate browser tab", async () => {
+test("keeps every external link in a separate browser tab", async () => {
   const page = await read("app/page.tsx");
   const externalLinks = [...page.matchAll(/<a\b[^>]*href="https?:\/\/[^"]+"[^>]*>/g)].map(([tag]) => tag);
 
-  assert.equal(externalLinks.length, 3);
+  assert.ok(externalLinks.length >= 3);
   for (const link of externalLinks) {
     assert.match(link, /\btarget="_blank"/);
     assert.match(link, /\brel="noopener noreferrer"/);
   }
+});
+
+test("keeps the curiosity-led microtests proposal isolated behind its preview query", async () => {
+  const [page, css] = await Promise.all([read("app/page.tsx"), read("app/globals.css")]);
+
+  assert.match(page, /get\("microtests"\)/);
+  assert.match(page, /preview !== "questions"/);
+  assert.match(page, /data-microtests-preview="off"/);
+  assert.match(page, /root\.dataset\.microtestsPreview = preview/);
+  assert.match(page, />Тесты о себе</);
+  assert.match(page, /className="microtests-mobile-trigger"/);
+  assert.match(page, /Что хочется понять сейчас\?/);
+  assert.match(page, /Я устал <em>или потерял интерес\?<\/em>/);
+  assert.match(page, /Все 10 тестов/);
+  assert.match(page, /#test\/tired-or-uninterested/);
+  assert.match(page, /#test\/distance-after-closeness/);
+  assert.match(page, /onClick=\{\(\) => setMicrotestsMenuOpen\(\(current\) => !current\)\}/);
+  assert.match(page, /event\.detail === 0 \? !current : true/);
+  assert.match(page, /window\.matchMedia\("\(max-width: 1020px\)"\)\.matches/);
+  assert.doesNotMatch(page, /onFocus=\{\(\) => setMicrotestsMenuOpen\(true\)\}/);
+  assert.match(page, /<header className="site-header" onMouseLeave=\{\(\) => setMicrotestsMenuOpen\(false\)\}>/);
+  assert.match(page, /className=\{`microtests-nav-item[\s\S]*?onMouseEnter=\{\(\) => setMicrotestsMenuOpen\(true\)\}/);
+  assert.match(page, /href=\{test\.href\} target="_blank" rel="noopener noreferrer"/);
+  assert.match(page, /href=\{microtestsHome\} target="_blank" rel="noopener noreferrer"/);
+
+  assert.match(css, /\.microtests-nav-item,\s*[\s\S]*?\.microtests-band,\s*[\s\S]*?\.footer-microtests-link\s*\{\s*display:\s*none\s*;/);
+  assert.match(css, /main\[data-microtests-preview="questions"\] \.promise-band\s*\{\s*display:\s*none\s*;/);
+  assert.match(css, /main\[data-microtests-preview="questions"\] \.microtests-band\s*\{\s*display:\s*block\s*;/);
+  assert.match(css, /\.microtests-nav-dropdown\s*\{[^}]*position:\s*absolute\s*;/);
+  assert.doesNotMatch(css, /site-header:has\(\.microtests-nav-item:hover\)/);
+  assert.match(css, /@media\s*\(min-width:\s*821px\)\s*and\s*\(max-width:\s*1020px\)[\s\S]*?main\[data-microtests-preview="questions"\] \.microtests-mobile-trigger\s*\{[^}]*display:\s*inline-flex\s*;/);
+  assert.match(css, /@media\s*\(max-width:\s*820px\)[\s\S]*?main\[data-microtests-preview="questions"\] \.microtests-mobile-trigger\s*\{[^}]*display:\s*inline-flex\s*;/);
 });
 
 test("adds mobile breathing room only around the lead-form consent and submit action", async () => {
@@ -100,7 +132,7 @@ test("offers three transparent marker previews and a no-marker comparison withou
   assert.match(page, /marker !== "twig-a" && marker !== "twig-b" && marker !== "twig-c" && marker !== "none"/);
   assert.match(page, /root\.dataset\.markerPreview = marker/);
   assert.match(page, /return \(\) => \{ root\.dataset\.markerPreview = "twig-b"; \}/);
-  assert.match(page, /<main ref=\{pageRoot\} data-marker-preview="twig-b">/);
+  assert.match(page, /<main ref=\{pageRoot\} data-marker-preview="twig-b" data-microtests-preview="off">/);
   assert.match(page, /<section className="faq-section section-shell" id="faq">/);
 
   assert.match(css, /\.eyebrow::before\s*\{[^}]*width:\s*32px\s*;[^}]*height:\s*1px\s*;[^}]*margin-right:\s*11px\s*;[^}]*background:\s*currentColor\s*;[^}]*opacity:\s*0\.5\s*;/);

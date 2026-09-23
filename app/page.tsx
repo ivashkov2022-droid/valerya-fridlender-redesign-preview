@@ -76,6 +76,30 @@ const faqs = [
   ["Можно ли заниматься онлайн?", "Да. Онлайн — основной формат практики. Для сессии понадобятся стабильная связь и место, где вы сможете говорить без посторонних."],
 ];
 
+const microtestsHome = "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#home";
+const microtests = [
+  {
+    title: "Я устал или потерял интерес?",
+    topic: "Состояние",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/tired-or-uninterested",
+  },
+  {
+    title: "Мне нужен отдых или перемена?",
+    topic: "Решение",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/rest-or-change",
+  },
+  {
+    title: "Почему я отдаляюсь после сближения?",
+    topic: "Отношения",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/distance-after-closeness",
+  },
+  {
+    title: "Мне подходит эта работа?",
+    topic: "Работа",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/work-fit",
+  },
+];
+
 function positionFormatPrompt(button: HTMLButtonElement, clientX: number, clientY: number) {
   const bounds = button.getBoundingClientRect();
   const promptSize = 62;
@@ -111,6 +135,7 @@ export default function Home() {
   const [activeMethod, setActiveMethod] = useState<MethodKey | null>(null);
   const [activeMobileFormat, setActiveMobileFormat] = useState<LeadFormKey | null>(null);
   const [activeFaq, setActiveFaq] = useState(0);
+  const [microtestsMenuOpen, setMicrotestsMenuOpen] = useState(false);
   const pageRoot = useRef<HTMLElement>(null);
   const formatsList = useRef<HTMLDivElement>(null);
   const closeForm = useCallback(() => setActiveForm(null), []);
@@ -124,6 +149,42 @@ export default function Home() {
 
     root.dataset.markerPreview = marker;
     return () => { root.dataset.markerPreview = "twig-b"; };
+  }, []);
+
+  useEffect(() => {
+    const preview = new URLSearchParams(window.location.search).get("microtests");
+    const root = pageRoot.current;
+    if (!root || preview !== "questions") return;
+
+    root.dataset.microtestsPreview = preview;
+    return () => { root.dataset.microtestsPreview = "off"; };
+  }, []);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("microtests") !== "questions") return;
+    const header = pageRoot.current?.querySelector<HTMLElement>(".site-header");
+    if (!header) return;
+
+    const closeOutside = (event: PointerEvent | FocusEvent) => {
+      if (!header.contains(event.target as Node | null)) setMicrotestsMenuOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMicrotestsMenuOpen(false);
+      const selector = window.matchMedia("(max-width: 1020px)").matches
+        ? ".microtests-mobile-trigger"
+        : ".microtests-nav-trigger";
+      header.querySelector<HTMLButtonElement>(selector)?.focus();
+    };
+
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("focusin", closeOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("focusin", closeOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
   }, []);
 
   useEffect(() => {
@@ -186,14 +247,14 @@ export default function Home() {
   }, []);
 
   return (
-    <main ref={pageRoot} data-marker-preview="twig-b">
+    <main ref={pageRoot} data-marker-preview="twig-b" data-microtests-preview="off">
       <div className="info-bar">
         <a href="tel:+79111284444">+7 911 128-44-44</a>
         <span>Онлайн по всему миру</span>
         <span>Санкт-Петербург</span>
       </div>
 
-      <header className="site-header">
+      <header className="site-header" onMouseLeave={() => setMicrotestsMenuOpen(false)}>
         <a className="brand" href="#top" aria-label="Валерия Фридлендер — главная">
           <span>Валерия Фридлендер</span>
           <small>практический психолог</small>
@@ -203,8 +264,59 @@ export default function Home() {
           <a href="#approach">Подход</a>
           <a href="#about">Обо мне</a>
           <a href="#formats">Стоимость</a>
+          <div
+            className={`microtests-nav-item${microtestsMenuOpen ? " is-open" : ""}`}
+            onMouseEnter={() => setMicrotestsMenuOpen(true)}
+          >
+            <button
+              className="microtests-nav-trigger"
+              type="button"
+              aria-expanded={microtestsMenuOpen}
+              aria-controls="microtests-menu"
+              onClick={(event) => setMicrotestsMenuOpen((current) => event.detail === 0 ? !current : true)}
+            >
+              Тесты о себе
+            </button>
+          </div>
           <a href="#contact">Контакты</a>
         </nav>
+        <button
+          className="microtests-mobile-trigger"
+          type="button"
+          aria-expanded={microtestsMenuOpen}
+          aria-controls="microtests-menu"
+          onClick={() => setMicrotestsMenuOpen((current) => !current)}
+        >
+          Тесты
+        </button>
+        <div
+          className={`microtests-nav-dropdown${microtestsMenuOpen ? " is-open" : ""}`}
+          id="microtests-menu"
+          role="group"
+          aria-label="Тесты о себе"
+          aria-hidden={!microtestsMenuOpen}
+          onMouseEnter={() => setMicrotestsMenuOpen(true)}
+          onMouseLeave={() => setMicrotestsMenuOpen(false)}
+        >
+          <div className="microtests-nav-panel">
+            <div className="microtests-nav-copy">
+              <p>Короткие тесты · 4–6 минут</p>
+              <h2>Что хочется понять сейчас?</h2>
+              <span>Выберите вопрос, который отзывается. Без диагнозов и правильных ответов.</span>
+            </div>
+            <div className="microtests-nav-links">
+              {microtests.map((test) => (
+                <a href={test.href} target="_blank" rel="noopener noreferrer" key={test.title}>
+                  <small>{test.topic}</small>
+                  <strong>{test.title}</strong>
+                </a>
+              ))}
+              <a className="microtests-nav-all" href={microtestsHome} target="_blank" rel="noopener noreferrer">
+                Все 10 тестов <span>4–6 минут каждый</span>
+              </a>
+            </div>
+          </div>
+        </div>
         <button className="nav-cta lead-trigger" type="button" onClick={() => setActiveForm("header-start")}>Начать работу <span aria-hidden="true">⟶</span></button>
       </header>
 
@@ -256,6 +368,31 @@ export default function Home() {
         <p>На сессии не нужно доказывать, что вам действительно трудно.</p>
         <h2>Можно не знать правильных слов. Достаточно говорить о том, что происходит.</h2>
         <button type="button" onClick={() => setActiveForm("first-session")}>Записаться на первую сессию ⟶</button>
+      </section>
+
+      <section className="microtests-band" id="self-tests" aria-labelledby="microtests-heading">
+        <div className="microtests-band-inner">
+          <div className="microtests-band-copy">
+            <p className="eyebrow eyebrow-light">Короткий тест · 4–6 минут</p>
+            <h2 id="microtests-heading">Я устал <em>или потерял интерес?</em></h2>
+            <p>Похожие состояния могут требовать разных решений. Короткий тест помогает увидеть свою ситуацию точнее, а позже вернуться к вопросу и заметить, что изменилось.</p>
+            <div className="microtests-band-actions">
+              <a href={microtests[0].href} target="_blank" rel="noopener noreferrer">Пройти тест</a>
+              <a href={microtestsHome} target="_blank" rel="noopener noreferrer">Выбрать другой вопрос</a>
+            </div>
+          </div>
+          <div className="microtests-band-list">
+            <p>Ещё можно проверить</p>
+            {microtests.slice(1).map((test) => (
+              <a href={test.href} target="_blank" rel="noopener noreferrer" key={test.title}>
+                <small>{test.topic}</small>
+                <strong>{test.title}</strong>
+                <span>4–6 минут</span>
+              </a>
+            ))}
+            <a className="microtests-band-all" href={microtestsHome} target="_blank" rel="noopener noreferrer">Все 10 тестов</a>
+          </div>
+        </div>
       </section>
 
       <section className="methods-section section-shell" id="approach">
@@ -407,6 +544,7 @@ export default function Home() {
             <a href="#approach">Методы</a>
             <a href="#about">О Валерии</a>
             <a href="#formats">Форматы и стоимость</a>
+            <a className="footer-microtests-link" href={microtestsHome} target="_blank" rel="noopener noreferrer">Тесты о себе</a>
             <a href="#contact">Запись</a>
           </div>
 
