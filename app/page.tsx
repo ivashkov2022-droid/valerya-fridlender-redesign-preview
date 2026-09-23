@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { LeadFormKey, LeadModal, MethodDrawer, MethodKey, ServiceKey, ServiceModal } from "./lead-funnels";
 
 const trustPoints = [
@@ -109,9 +109,54 @@ export default function Home() {
   const [activeForm, setActiveForm] = useState<LeadFormKey | null>(null);
   const [activeService, setActiveService] = useState<ServiceKey | null>(null);
   const [activeMethod, setActiveMethod] = useState<MethodKey | null>(null);
+  const [activeMobileFormat, setActiveMobileFormat] = useState<LeadFormKey | null>(null);
+  const [activeFaq, setActiveFaq] = useState(0);
+  const formatsList = useRef<HTMLDivElement>(null);
   const closeForm = useCallback(() => setActiveForm(null), []);
   const closeService = useCallback(() => setActiveService(null), []);
   const closeMethod = useCallback(() => setActiveMethod(null), []);
+
+  useEffect(() => {
+    const list = formatsList.current;
+    if (!list) return;
+
+    const mobileQuery = window.matchMedia("(max-width: 560px)");
+    let observer: IntersectionObserver | null = null;
+
+    const watchMobileFormats = () => {
+      observer?.disconnect();
+      observer = null;
+
+      if (!mobileQuery.matches) {
+        setActiveMobileFormat(null);
+        return;
+      }
+
+      const options = [...list.querySelectorAll<HTMLElement>(".format-option")];
+      setActiveMobileFormat((current) => current ?? formats[0].key);
+      observer = new IntersectionObserver((entries) => {
+        const centered = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((left, right) => {
+            const center = window.innerHeight / 2;
+            const leftDistance = Math.abs(left.boundingClientRect.top + left.boundingClientRect.height / 2 - center);
+            const rightDistance = Math.abs(right.boundingClientRect.top + right.boundingClientRect.height / 2 - center);
+            return leftDistance - rightDistance;
+          })[0];
+        const formatKey = centered?.target.getAttribute("data-format-key") as LeadFormKey | null;
+        if (formatKey) setActiveMobileFormat(formatKey);
+      }, { rootMargin: "-36% 0px -36% 0px", threshold: 0.01 });
+
+      options.forEach((option) => observer?.observe(option));
+    };
+
+    watchMobileFormats();
+    mobileQuery.addEventListener("change", watchMobileFormats);
+    return () => {
+      observer?.disconnect();
+      mobileQuery.removeEventListener("change", watchMobileFormats);
+    };
+  }, []);
 
   return (
     <main>
@@ -255,9 +300,13 @@ export default function Home() {
               <span aria-hidden="true"><b>Выбрать</b></span>
             </button>
           </div>
-          <div className="price-list">
+          <div className="price-list" ref={formatsList}>
             {formats.map((format) => (
-              <article className="format-option" key={format.key}>
+              <article
+                className={`format-option${activeMobileFormat === format.key ? " is-scroll-active" : ""}`}
+                data-format-key={format.key}
+                key={format.key}
+              >
                 <span>{format.title}</span><small id={`${format.key}-details`}>{format.text}</small><strong id={`${format.key}-price`}>{format.price}</strong>
                 <button
                   className="format-select"
@@ -289,7 +338,12 @@ export default function Home() {
       <section className="faq-section section-shell">
         <div className="faq-title"><p className="eyebrow">Вопросы</p><h2>До первой встречи</h2></div>
         <div className="faq-list">
-          {faqs.map(([question, answer], index) => <details key={question} open={index === 0}><summary><span>{question}</span><i aria-hidden="true">+</i></summary><p>{answer}</p></details>)}
+          {faqs.map(([question, answer], index) => (
+            <details key={question} name="before-first-session" open={activeFaq === index}>
+              <summary onClick={(event) => { event.preventDefault(); setActiveFaq(index); }}><span>{question}</span><i aria-hidden="true">+</i></summary>
+              <p>{answer}</p>
+            </details>
+          ))}
         </div>
       </section>
 

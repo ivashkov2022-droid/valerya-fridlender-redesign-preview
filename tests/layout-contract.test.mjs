@@ -71,3 +71,22 @@ test("adds mobile breathing room only around the lead-form consent and submit ac
     /@media\s*\(max-width:\s*560px\)[\s\S]*?\.lead-consent\s*\{[^}]*margin-top:\s*5px\s*;[^}]*\}[\s\S]*?\.lead-submit\s*\{[^}]*margin-top:\s*5px\s*;[^}]*\}/,
   );
 });
+
+test("activates one mobile format on scroll while keeping the entire row clickable", async () => {
+  const [page, css] = await Promise.all([read("app/page.tsx"), read("app/globals.css")]);
+
+  assert.match(page, /new IntersectionObserver/);
+  assert.match(page, /window\.matchMedia\("\(max-width: 560px\)"\)/);
+  assert.match(page, /className=\{`format-option\$\{activeMobileFormat === format\.key \? " is-scroll-active" : ""\}`\}/);
+  assert.match(page, /data-format-key=\{format\.key\}/);
+  assert.match(css, /\.format-select\s*\{[^}]*position:\s*absolute\s*;[^}]*inset:\s*0\s*;/);
+  assert.match(css, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.format-option\.is-scroll-active[\s\S]*?\.format-select::after/);
+});
+
+test("groups the FAQ so opening a question closes the previous one", async () => {
+  const page = await read("app/page.tsx");
+
+  assert.match(page, /const \[activeFaq, setActiveFaq\] = useState\(0\)/);
+  assert.match(page, /<details key=\{question\} name="before-first-session" open=\{activeFaq === index\}>/);
+  assert.match(page, /event\.preventDefault\(\); setActiveFaq\(index\)/);
+});
