@@ -49,3 +49,14 @@ test("uses only the approved local production fonts and preserves the approved s
   assert.match(css, /@media\s*\(max-width:\s*820px\)[\s\S]*?\.service-grid\s*\{[^}]*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.service-grid\s*\{[^}]*minmax\(0,\s*1fr\)/);
 });
+
+test("keeps every external social link in a separate browser tab", async () => {
+  const page = await read("app/page.tsx");
+  const externalLinks = [...page.matchAll(/<a\b[^>]*href="https?:\/\/[^"]+"[^>]*>/g)].map(([tag]) => tag);
+
+  assert.equal(externalLinks.length, 3);
+  for (const link of externalLinks) {
+    assert.match(link, /\btarget="_blank"/);
+    assert.match(link, /\brel="noopener noreferrer"/);
+  }
+});

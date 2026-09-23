@@ -303,7 +303,7 @@ export default function Home() {
           <p className="eyebrow eyebrow-light">Запись на сессию</p>
           <h2>Опишите запрос.<br /><em>Я отвечу лично.</em></h2>
           <p>В первом сообщении достаточно кратко написать, что происходит. Я отвечу на вопросы и предложу время для встречи.</p>
-          <div className="contact-actions"><button className="button button-light" type="button" onClick={() => setActiveForm("contact")}>Оставить заявку</button><a className="contact-link" href="https://t.me/Valeria_Fridlender">Telegram ⟶</a></div>
+          <div className="contact-actions"><button className="button button-light" type="button" onClick={() => setActiveForm("contact")}>Оставить заявку</button><a className="contact-link" href="https://t.me/Valeria_Fridlender" target="_blank" rel="noopener noreferrer">Telegram ⟶</a></div>
         </div>
       </section>
 
@@ -339,7 +339,7 @@ export default function Home() {
             <a href="mailto:valeryafridlender@gmail.com">valeryafridlender@gmail.com</a>
             <span>Санкт-Петербург</span>
             <span>Онлайн по всему миру</span>
-            <div><a href="https://t.me/Valeria_Fridlender">Telegram</a><a href="https://vk.com/lerapsy">VKontakte</a></div>
+            <div><a href="https://t.me/Valeria_Fridlender" target="_blank" rel="noopener noreferrer">Telegram</a><a href="https://vk.com/lerapsy" target="_blank" rel="noopener noreferrer">VKontakte</a></div>
           </div>
         </div>
 
