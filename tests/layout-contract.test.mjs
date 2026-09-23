@@ -18,11 +18,13 @@ test("keeps the approved desktop intro and formats geometry stable", async () =>
 
   assert.match(
     page,
-    /<h2>\s*<span className="formats-title-line">Онлайн-<\/span>\s*<span className="formats-title-line">сессии<\/span>\s*<\/h2>/,
+    /<h2 aria-label="Онлайн-сессии">[\s\S]*?<span className="formats-title-line">[\s\S]*?Онлайн<span className="formats-straight-hyphen" aria-hidden="true" \/>[\s\S]*?<span className="formats-title-line">сессии<\/span>[\s\S]*?<\/h2>/,
   );
-  assert.doesNotMatch(page, /formats-hyphen/);
+  assert.doesNotMatch(page, /formats-title-line">\s*Онлайн-/);
   assert.match(css, /@media\s*\(min-width:\s*821px\)\s*\{[\s\S]*?\.formats-title-line\s*\{\s*display:\s*block\s*;/);
-  assert.doesNotMatch(css, /\.formats-hyphen\s*\{/);
+  assert.match(css, /\.formats-straight-hyphen\s*\{[^}]*display:\s*inline-block\s*;[^}]*width:\s*0\.3em\s*;[^}]*height:\s*0\.045em\s*;[^}]*background:\s*currentColor\s*;[^}]*vertical-align:\s*0\.19em\s*;/);
+  const straightHyphenRule = css.match(/\.formats-straight-hyphen\s*\{([^}]*)\}/)?.[1] ?? "";
+  assert.doesNotMatch(straightHyphenRule, /(?:rotate|skew|transform)\s*:/);
 });
 
 test("uses only the approved local production fonts and preserves the approved services cards", async () => {

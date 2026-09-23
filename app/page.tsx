@@ -228,7 +228,12 @@ export default function Home() {
         <div className="formats-inner section-shell">
           <div className="formats-heading">
             <p className="eyebrow eyebrow-light">Форматы и стоимость</p>
-            <h2><span className="formats-title-line">Онлайн-</span><span className="formats-title-line">сессии</span></h2>
+            <h2 aria-label="Онлайн-сессии">
+              <span className="formats-title-line">
+                Онлайн<span className="formats-straight-hyphen" aria-hidden="true" />
+              </span>
+              <span className="formats-title-line">сессии</span>
+            </h2>
             <p>Разовая консультация или пакет встреч для последовательной работы с запросом.</p>
             <button
               className="formats-overview-select"

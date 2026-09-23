@@ -449,6 +449,7 @@ h1, h2, h3, p { margin-top: 0; }
 .formats-heading .eyebrow { display: flex; align-items: center; gap: 11px; line-height: 1; }
 .formats-heading .eyebrow::before { flex: 0 0 32px; margin-right: 0; }
 .formats-heading h2 { margin-bottom: 21px; font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(56px, 6vw, 82px); font-weight: 400; line-height: 0.9; text-transform: uppercase; }
+.formats-straight-hyphen { display: inline-block; width: 0.3em; height: 0.045em; margin-left: 0.02em; border-radius: 999px; background: currentColor; vertical-align: 0.19em; }
 .formats-heading > p:last-of-type { max-width: 440px; }
 .formats-overview-select { display: none; }
 .price-list { border-top: 1px solid rgba(255, 255, 255, 0.45); }
