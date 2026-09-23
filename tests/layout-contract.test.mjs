@@ -64,7 +64,11 @@ test("keeps every external link in a separate browser tab", async () => {
 });
 
 test("keeps the curiosity-led microtests proposal isolated behind its preview query", async () => {
-  const [page, css] = await Promise.all([read("app/page.tsx"), read("app/globals.css")]);
+  const [page, css, chooser] = await Promise.all([
+    read("app/page.tsx"),
+    read("app/globals.css"),
+    read("app/microtests-chooser.tsx"),
+  ]);
 
   assert.match(page, /get\("microtests"\)/);
   assert.match(page, /preview !== "questions"/);
@@ -74,9 +78,18 @@ test("keeps the curiosity-led microtests proposal isolated behind its preview qu
   assert.match(page, /className="microtests-mobile-trigger"/);
   assert.match(page, /Что хочется понять сейчас\?/);
   assert.match(page, /Я устал <em>или потерял интерес\?<\/em>/);
-  assert.match(page, /Все 10 тестов/);
+  assert.match(page, /Короткие бесплатные тесты/);
+  assert.match(page, /Короткий бесплатный тест/);
+  assert.match(page, /Смотреть ещё тесты/);
+  assert.match(page, /Выбрать другой вопрос/);
+  assert.doesNotMatch(page, /4[–-]6 минут/);
+  assert.doesNotMatch(page, /Все 10 тестов/);
+  assert.doesNotMatch(page, /microtestsHome/);
   assert.match(page, /#test\/tired-or-uninterested/);
   assert.match(page, /#test\/distance-after-closeness/);
+  assert.match(page, /oprosnik-kettella-16pf/);
+  assert.match(page, /shkala-beznadezhnosti-beka/);
+  assert.match(page, /shkala-trevogi-beka/);
   assert.match(page, /onClick=\{\(\) => setMicrotestsMenuOpen\(\(current\) => !current\)\}/);
   assert.match(page, /event\.detail === 0 \? !current : true/);
   assert.match(page, /window\.matchMedia\("\(max-width: 1020px\)"\)\.matches/);
@@ -84,15 +97,53 @@ test("keeps the curiosity-led microtests proposal isolated behind its preview qu
   assert.match(page, /<header className="site-header" onMouseLeave=\{\(\) => setMicrotestsMenuOpen\(false\)\}>/);
   assert.match(page, /className=\{`microtests-nav-item[\s\S]*?onMouseEnter=\{\(\) => setMicrotestsMenuOpen\(true\)\}/);
   assert.match(page, /href=\{test\.href\} target="_blank" rel="noopener noreferrer"/);
-  assert.match(page, /href=\{microtestsHome\} target="_blank" rel="noopener noreferrer"/);
+  assert.match(page, /<MicrotestsChooser tests=\{microtests\} onClose=\{closeMicrotestsChooser\}/);
+  assert.match(page, /if \(!microtestsMenuOpen\) return/);
+
+  assert.match(chooser, /role="dialog"/);
+  assert.match(chooser, /aria-modal="true"/);
+  assert.match(chooser, /event\.key === "Escape"/);
+  assert.match(chooser, /event\.key !== "Tab"/);
+  assert.match(chooser, /target="_blank"/);
+  assert.match(chooser, /rel="noopener noreferrer"/);
+  assert.match(chooser, /Бесплатные тесты/);
+  assert.doesNotMatch(chooser, /4[–-]6 минут/);
 
   assert.match(css, /\.microtests-nav-item,\s*[\s\S]*?\.microtests-band,\s*[\s\S]*?\.footer-microtests-link\s*\{\s*display:\s*none\s*;/);
   assert.match(css, /main\[data-microtests-preview="questions"\] \.promise-band\s*\{\s*display:\s*none\s*;/);
   assert.match(css, /main\[data-microtests-preview="questions"\] \.microtests-band\s*\{\s*display:\s*block\s*;/);
   assert.match(css, /\.microtests-nav-dropdown\s*\{[^}]*position:\s*absolute\s*;/);
+  assert.match(css, /@media\s*\(min-width:\s*821px\)[\s\S]*?\.microtests-band-inner\s*\{\s*padding:\s*52px\s+38px\s+56px\s*;/);
+  assert.match(css, /\.microtests-band-copy h2\s*\{[\s\S]*?font:\s*400\s+clamp\(50px,\s*4vw,\s*58px\)\/0\.96\s+var\(--font-display\)\s*;/);
   assert.doesNotMatch(css, /site-header:has\(\.microtests-nav-item:hover\)/);
   assert.match(css, /@media\s*\(min-width:\s*821px\)\s*and\s*\(max-width:\s*1020px\)[\s\S]*?main\[data-microtests-preview="questions"\] \.microtests-mobile-trigger\s*\{[^}]*display:\s*inline-flex\s*;/);
   assert.match(css, /@media\s*\(max-width:\s*820px\)[\s\S]*?main\[data-microtests-preview="questions"\] \.microtests-mobile-trigger\s*\{[^}]*display:\s*inline-flex\s*;/);
+});
+
+test("keeps the complete verified microtests inventory in the on-site chooser", async () => {
+  const page = await read("app/page.tsx");
+  const ids = [
+    "external-evaluation",
+    "tired-or-uninterested",
+    "rest-or-change",
+    "space-for-relationships",
+    "distance-after-closeness",
+    "work-fit",
+    "ready-to-move",
+    "city-or-life",
+    "send-message",
+    "clothes-support",
+    "cattell-16pf",
+    "beck-hopelessness",
+    "beck-anxiety",
+  ];
+
+  for (const id of ids) assert.match(page, new RegExp(`id: "${id}"`));
+  assert.equal([...page.matchAll(/\bid: "(?:external-evaluation|tired-or-uninterested|rest-or-change|space-for-relationships|distance-after-closeness|work-fit|ready-to-move|city-or-life|send-message|clothes-support|cattell-16pf|beck-hopelessness|beck-anxiety)"/g)].length, 13);
+
+  const hrefs = [...page.matchAll(/href: "(https:\/\/(?:vazuri\.ru\/tochka-opory-microtests-r6m8p2x5\/#test\/[^"\s]+|ivashkov2022-droid\.github\.io\/(?:oprosnik-kettella-16pf|shkala-beznadezhnosti-beka|shkala-trevogi-beka)\/))"/g)].map((match) => match[1]);
+  assert.equal(hrefs.length, 13);
+  assert.equal(new Set(hrefs).size, 13);
 });
 
 test("adds mobile breathing room only around the lead-form consent and submit action", async () => {

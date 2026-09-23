@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { LeadFormKey, LeadModal, MethodDrawer, MethodKey, ServiceKey, ServiceModal } from "./lead-funnels";
+import { MicrotestsChooser } from "./microtests-chooser";
 
 const trustPoints = [
   { title: "7 лет практики", text: "1 407 проведённых сессий в индивидуальном формате" },
@@ -76,29 +78,101 @@ const faqs = [
   ["Можно ли заниматься онлайн?", "Да. Онлайн — основной формат практики. Для сессии понадобятся стабильная связь и место, где вы сможете говорить без посторонних."],
 ];
 
-const microtestsHome = "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#home";
 const microtests = [
   {
+    id: "tired-or-uninterested",
     title: "Я устал или потерял интерес?",
     topic: "Состояние",
+    group: "Микронаблюдения",
     href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/tired-or-uninterested",
   },
   {
+    id: "rest-or-change",
     title: "Мне нужен отдых или перемена?",
-    topic: "Решение",
+    topic: "Состояние",
+    group: "Микронаблюдения",
     href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/rest-or-change",
   },
   {
-    title: "Почему я отдаляюсь после сближения?",
+    id: "distance-after-closeness",
+    title: "Почему я отдаляюсь, когда человек становится ближе?",
     topic: "Отношения",
+    group: "Микронаблюдения",
     href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/distance-after-closeness",
   },
   {
+    id: "work-fit",
     title: "Мне подходит эта работа?",
     topic: "Работа",
+    group: "Микронаблюдения",
     href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/work-fit",
   },
+  {
+    id: "external-evaluation",
+    title: "Насколько я завишу от внешней оценки?",
+    topic: "Понять себя",
+    group: "Микронаблюдения",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/external-evaluation",
+  },
+  {
+    id: "space-for-relationships",
+    title: "Есть ли у меня сейчас место для отношений?",
+    topic: "Отношения",
+    group: "Микронаблюдения",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/space-for-relationships",
+  },
+  {
+    id: "ready-to-move",
+    title: "Готов ли я к переезду?",
+    topic: "Решения",
+    group: "Микронаблюдения",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/ready-to-move",
+  },
+  {
+    id: "city-or-life",
+    title: "Мне не подходит город или моя жизнь в нём?",
+    topic: "Решения",
+    group: "Микронаблюдения",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/city-or-life",
+  },
+  {
+    id: "send-message",
+    title: "Отправлять ли это сообщение сейчас?",
+    topic: "Общение",
+    group: "Микронаблюдения",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/send-message",
+  },
+  {
+    id: "clothes-support",
+    title: "Как одеться сегодня под своё состояние и задачи?",
+    topic: "Повседневность",
+    group: "Микронаблюдения",
+    href: "https://vazuri.ru/tochka-opory-microtests-r6m8p2x5/#test/clothes-support",
+  },
+  {
+    id: "cattell-16pf",
+    title: "16-факторный личностный опросник Кеттелла — 16PF",
+    topic: "Личность",
+    group: "Классические опросники",
+    href: "https://ivashkov2022-droid.github.io/oprosnik-kettella-16pf/",
+  },
+  {
+    id: "beck-hopelessness",
+    title: "Шкала безнадёжности Бека — BHS",
+    topic: "Состояние",
+    group: "Классические опросники",
+    href: "https://ivashkov2022-droid.github.io/shkala-beznadezhnosti-beka/",
+  },
+  {
+    id: "beck-anxiety",
+    title: "Шкала тревоги Бека — BAI",
+    topic: "Состояние",
+    group: "Классические опросники",
+    href: "https://ivashkov2022-droid.github.io/shkala-trevogi-beka/",
+  },
 ];
+
+const featuredMicrotests = microtests.slice(0, 4);
 
 function positionFormatPrompt(button: HTMLButtonElement, clientX: number, clientY: number) {
   const bounds = button.getBoundingClientRect();
@@ -136,11 +210,38 @@ export default function Home() {
   const [activeMobileFormat, setActiveMobileFormat] = useState<LeadFormKey | null>(null);
   const [activeFaq, setActiveFaq] = useState(0);
   const [microtestsMenuOpen, setMicrotestsMenuOpen] = useState(false);
+  const [microtestsChooserOpen, setMicrotestsChooserOpen] = useState(false);
   const pageRoot = useRef<HTMLElement>(null);
   const formatsList = useRef<HTMLDivElement>(null);
+  const microtestsReturnFocus = useRef<HTMLElement | null>(null);
   const closeForm = useCallback(() => setActiveForm(null), []);
   const closeService = useCallback(() => setActiveService(null), []);
   const closeMethod = useCallback(() => setActiveMethod(null), []);
+  const openMicrotestsChooser = useCallback((event: ReactMouseEvent<HTMLElement>) => {
+    const source = event.currentTarget;
+    const headerTriggerSelector = window.matchMedia("(max-width: 1020px)").matches
+      ? ".microtests-mobile-trigger"
+      : ".microtests-nav-trigger";
+    microtestsReturnFocus.current = source.closest(".microtests-nav-dropdown")
+      ? pageRoot.current?.querySelector<HTMLElement>(headerTriggerSelector) ?? source
+      : source;
+    setMicrotestsMenuOpen(false);
+    setMicrotestsChooserOpen(true);
+  }, []);
+  const closeMicrotestsChooser = useCallback(() => {
+    setMicrotestsChooserOpen(false);
+    window.requestAnimationFrame(() => {
+      const savedTarget = microtestsReturnFocus.current;
+      if (savedTarget?.getClientRects().length) {
+        savedTarget.focus();
+        return;
+      }
+      const fallbackSelector = window.matchMedia("(max-width: 1020px)").matches
+        ? ".microtests-mobile-trigger"
+        : ".microtests-nav-trigger";
+      pageRoot.current?.querySelector<HTMLElement>(fallbackSelector)?.focus();
+    });
+  }, []);
 
   useEffect(() => {
     const marker = new URLSearchParams(window.location.search).get("marker");
@@ -162,6 +263,7 @@ export default function Home() {
 
   useEffect(() => {
     if (new URLSearchParams(window.location.search).get("microtests") !== "questions") return;
+    if (!microtestsMenuOpen) return;
     const header = pageRoot.current?.querySelector<HTMLElement>(".site-header");
     if (!header) return;
 
@@ -185,7 +287,7 @@ export default function Home() {
       document.removeEventListener("focusin", closeOutside);
       document.removeEventListener("keydown", closeOnEscape);
     };
-  }, []);
+  }, [microtestsMenuOpen]);
 
   useEffect(() => {
     const list = formatsList.current;
@@ -300,20 +402,20 @@ export default function Home() {
         >
           <div className="microtests-nav-panel">
             <div className="microtests-nav-copy">
-              <p>Короткие тесты · 4–6 минут</p>
+              <p>Короткие бесплатные тесты</p>
               <h2>Что хочется понять сейчас?</h2>
               <span>Выберите вопрос, который отзывается. Без диагнозов и правильных ответов.</span>
             </div>
             <div className="microtests-nav-links">
-              {microtests.map((test) => (
+              {featuredMicrotests.map((test) => (
                 <a href={test.href} target="_blank" rel="noopener noreferrer" key={test.title}>
                   <small>{test.topic}</small>
                   <strong>{test.title}</strong>
                 </a>
               ))}
-              <a className="microtests-nav-all" href={microtestsHome} target="_blank" rel="noopener noreferrer">
-                Все 10 тестов <span>4–6 минут каждый</span>
-              </a>
+              <button className="microtests-nav-all" type="button" onClick={openMicrotestsChooser}>
+                Смотреть ещё тесты <span aria-hidden="true">⟶</span>
+              </button>
             </div>
           </div>
         </div>
@@ -373,24 +475,23 @@ export default function Home() {
       <section className="microtests-band" id="self-tests" aria-labelledby="microtests-heading">
         <div className="microtests-band-inner">
           <div className="microtests-band-copy">
-            <p className="eyebrow eyebrow-light">Короткий тест · 4–6 минут</p>
+            <p className="eyebrow eyebrow-light">Короткий бесплатный тест</p>
             <h2 id="microtests-heading">Я устал <em>или потерял интерес?</em></h2>
             <p>Похожие состояния могут требовать разных решений. Короткий тест помогает увидеть свою ситуацию точнее, а позже вернуться к вопросу и заметить, что изменилось.</p>
             <div className="microtests-band-actions">
-              <a href={microtests[0].href} target="_blank" rel="noopener noreferrer">Пройти тест</a>
-              <a href={microtestsHome} target="_blank" rel="noopener noreferrer">Выбрать другой вопрос</a>
+              <a className="microtests-band-action-primary" href={featuredMicrotests[0].href} target="_blank" rel="noopener noreferrer">Пройти тест</a>
+              <button className="microtests-band-action-secondary" type="button" onClick={openMicrotestsChooser}>Выбрать другой вопрос</button>
             </div>
           </div>
           <div className="microtests-band-list">
             <p>Ещё можно проверить</p>
-            {microtests.slice(1).map((test) => (
+            {featuredMicrotests.slice(1).map((test) => (
               <a href={test.href} target="_blank" rel="noopener noreferrer" key={test.title}>
                 <small>{test.topic}</small>
                 <strong>{test.title}</strong>
-                <span>4–6 минут</span>
               </a>
             ))}
-            <a className="microtests-band-all" href={microtestsHome} target="_blank" rel="noopener noreferrer">Все 10 тестов</a>
+            <button className="microtests-band-all" type="button" onClick={openMicrotestsChooser}>Смотреть ещё тесты</button>
           </div>
         </div>
       </section>
@@ -544,7 +645,7 @@ export default function Home() {
             <a href="#approach">Методы</a>
             <a href="#about">О Валерии</a>
             <a href="#formats">Форматы и стоимость</a>
-            <a className="footer-microtests-link" href={microtestsHome} target="_blank" rel="noopener noreferrer">Тесты о себе</a>
+            <button className="footer-microtests-link" type="button" onClick={openMicrotestsChooser}>Тесты о себе</button>
             <a href="#contact">Запись</a>
           </div>
 
@@ -575,6 +676,7 @@ export default function Home() {
       {activeMethod && <MethodDrawer methodKey={activeMethod} onClose={closeMethod} onDiscuss={(formKey) => { setActiveMethod(null); setActiveForm(formKey); }} />}
       {activeService && <ServiceModal serviceKey={activeService} onClose={closeService} onContact={(formKey) => { setActiveService(null); setActiveForm(formKey); }} />}
       {activeForm && <LeadModal formKey={activeForm} onClose={closeForm} />}
+      {microtestsChooserOpen && <MicrotestsChooser tests={microtests} onClose={closeMicrotestsChooser} />}
     </main>
   );
 }
