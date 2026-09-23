@@ -62,3 +62,12 @@ test("keeps every external social link in a separate browser tab", async () => {
     assert.match(link, /\brel="noopener noreferrer"/);
   }
 });
+
+test("adds mobile breathing room only around the lead-form consent and submit action", async () => {
+  const css = await read("app/globals.css");
+
+  assert.match(
+    css,
+    /@media\s*\(max-width:\s*560px\)[\s\S]*?\.lead-consent\s*\{[^}]*margin-top:\s*5px\s*;[^}]*\}[\s\S]*?\.lead-submit\s*\{[^}]*margin-top:\s*5px\s*;[^}]*\}/,
+  );
+});

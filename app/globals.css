@@ -846,7 +846,8 @@ body.page-locked { overscroll-behavior: none; }
   .lead-dialog-form > p:not(.lead-form-kicker) { margin-bottom: 13px; }
   .lead-form { gap: 9px; }
   .lead-field textarea { height: 62px; }
-  .lead-consent { font-size: 8px; }
+  .lead-consent { margin-top: 5px; font-size: 8px; }
+  .lead-submit { margin-top: 5px; }
   .lead-close,
   .service-close { top: 8px; right: 8px; }
   .service-head { padding: 34px 78px 16px 20px; }
