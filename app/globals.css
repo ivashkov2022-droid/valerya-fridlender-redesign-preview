@@ -392,8 +392,13 @@ h1, h2, h3, p { margin-top: 0; }
 .formats-section { background: var(--blue); color: white; }
 .formats-inner { padding-top: 94px; padding-bottom: 96px; display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 90px; }
 .eyebrow-light { color: white; }
+.formats-heading { position: relative; }
+.formats-heading .eyebrow { display: flex; align-items: center; gap: 11px; line-height: 1; }
+.formats-heading .eyebrow::before { flex: 0 0 32px; margin-right: 0; }
 .formats-heading h2 { margin-bottom: 21px; font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(56px, 6vw, 82px); font-weight: 400; line-height: 0.9; text-transform: uppercase; }
-.formats-heading > p:last-child { max-width: 440px; }
+.formats-hyphen { position: relative; top: 0.04em; }
+.formats-heading > p:last-of-type { max-width: 440px; }
+.formats-overview-select { display: none; }
 .price-list { border-top: 1px solid rgba(255, 255, 255, 0.45); }
 .price-list article { position: relative; padding: 23px 0; display: grid; grid-template-columns: 1fr 1fr auto; gap: 20px; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.45); }
 .price-list span { font-family: "Cormorant Garamond", Georgia, serif; font-size: 30px; font-style: italic; line-height: 1; }
@@ -404,6 +409,14 @@ h1, h2, h3, p { margin-top: 0; }
 .format-select b { font: 600 8px/1 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; }
 .format-select[data-cursor="true"] > span { opacity: 1; transform: scale(1); }
 .format-select:focus-visible { outline: 2px solid white; outline-offset: -2px; }
+
+@media (hover: hover) and (pointer: fine) and (min-width: 561px) and (prefers-reduced-motion: no-preference) {
+  .formats-overview-select { position: absolute; z-index: 3; inset: 0; display: block; padding: 0; border: 0; background: transparent; color: var(--navy); cursor: pointer; }
+  .formats-overview-select > span { position: absolute; top: var(--formats-overview-pointer-y, 50%); left: var(--formats-overview-pointer-x, 50%); width: 62px; height: 62px; display: grid; place-content: center; border-radius: 50%; background: var(--cream); box-shadow: 0 12px 28px rgba(13,25,57,0.18); pointer-events: none; opacity: 0; transform: scale(0.72); transform-origin: top left; transition: opacity 180ms ease, transform 280ms cubic-bezier(.2,.78,.22,1); }
+  .formats-overview-select b { font: 600 8px/1 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; }
+  .formats-overview-select[data-cursor="true"] > span { opacity: 1; transform: scale(1); }
+  .formats-overview-select:focus-visible { outline: 2px solid white; outline-offset: -2px; }
+}
 
 @media (hover: none), (pointer: coarse), (max-width: 560px), (prefers-reduced-motion: reduce) {
   .price-list .format-option { padding-bottom: 43px; }

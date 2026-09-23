@@ -115,9 +115,10 @@ test("redirects duplicate home-page URLs", async () => {
 });
 
 test("publishes the privacy policy and separate consent as site pages", async () => {
-  const [policy, consent] = await Promise.all([
+  const [policy, consent, legalCss] = await Promise.all([
     readPublic("privacy-policy.html"),
     readPublic("personal-data-consent.html"),
+    readPublic("css/legal-pages.css"),
   ]);
 
   assert.match(policy, /<h1>Политика обработки персональных данных<\/h1>/i);
@@ -125,11 +126,24 @@ test("publishes the privacy policy and separate consent as site pages", async ()
   assert.match(policy, /ИНН: 781632346929/i);
   assert.match(policy, /Яндекс\.Метрика/i);
   assert.match(policy, /<meta name="robots" content="noindex, follow">/i);
-  assert.match(policy, /href="\/personal-data-consent"/i);
+  assert.match(policy, /href="personal-data-consent\.html"/i);
+  assert.match(policy, /<body class="legal-page">/i);
+  assert.match(policy, /<span>практический психолог<\/span>/i);
+  assert.match(policy, /href="css\/legal-pages\.css\?v=2"/i);
+  assert.match(policy, /href="\.\/" aria-label="Вернуться на сайт"/i);
 
   assert.match(consent, /<h1>Согласие на обработку персональных данных<\/h1>/i);
   assert.match(consent, /не более 90 дней/i);
-  assert.match(consent, /href="\/privacy-policy"/i);
+  assert.match(consent, /href="privacy-policy\.html"/i);
+  assert.match(consent, /<span>практический психолог<\/span>/i);
+  assert.match(consent, /href="css\/privacy-consent\.css\?v=4"/i);
+  assert.match(consent, /src="js\/privacy-consent\.js\?v=3" defer/i);
+  assert.doesNotMatch(policy, /(?:src|href)="\/(?:css|js)\//i);
+  assert.doesNotMatch(consent, /(?:src|href)="\/(?:css|js)\//i);
+  assert.doesNotMatch(policy, /fonts\.(?:googleapis|gstatic)\.com/i);
+  assert.doesNotMatch(consent, /fonts\.(?:googleapis|gstatic)\.com/i);
+  assert.match(legalCss, /\.\.\/fonts\/cormorant-garamond-cyrillic\.woff2/i);
+  assert.match(legalCss, /\.\.\/fonts\/montserrat-cyrillic\.woff2/i);
   assert.match(policy, /Сайт использует файлы cookie/i);
   assert.doesNotMatch(policy, /Настройки приватности|Необходимые функции работают всегда/i);
   assert.doesNotMatch(policy, /legal-toc/i);

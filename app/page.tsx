@@ -93,6 +93,19 @@ function positionFormatPrompt(button: HTMLButtonElement, clientX: number, client
   button.dataset.cursor = "true";
 }
 
+function positionFormatsOverviewPrompt(button: HTMLButtonElement, clientX: number, clientY: number) {
+  const bounds = button.getBoundingClientRect();
+  const promptSize = 62;
+  const inset = 8;
+  const offset = 12;
+  const x = Math.min(Math.max(clientX - bounds.left + offset, inset), bounds.width - promptSize - inset);
+  const y = Math.min(Math.max(clientY - bounds.top + offset, inset), bounds.height - promptSize - inset);
+
+  button.style.setProperty("--formats-overview-pointer-x", `${x}px`);
+  button.style.setProperty("--formats-overview-pointer-y", `${y}px`);
+  button.dataset.cursor = "true";
+}
+
 export default function Home() {
   const [activeForm, setActiveForm] = useState<LeadFormKey | null>(null);
   const [activeService, setActiveService] = useState<ServiceKey | null>(null);
@@ -214,7 +227,30 @@ export default function Home() {
 
       <section className="formats-section" id="formats">
         <div className="formats-inner section-shell">
-          <div className="formats-heading"><p className="eyebrow eyebrow-light">Форматы и стоимость</p><h2>Онлайн-сессии</h2><p>Разовая консультация или пакет встреч для последовательной работы с запросом.</p></div>
+          <div className="formats-heading">
+            <p className="eyebrow eyebrow-light">Форматы и стоимость</p>
+            <h2>Онлайн<span className="formats-hyphen">-</span>сессии</h2>
+            <p>Разовая консультация или пакет встреч для последовательной работы с запросом.</p>
+            <button
+              className="formats-overview-select"
+              type="button"
+              onPointerEnter={(event) => {
+                if (event.pointerType === "mouse") positionFormatsOverviewPrompt(event.currentTarget, event.clientX, event.clientY);
+              }}
+              onPointerMove={(event) => {
+                if (event.pointerType === "mouse") positionFormatsOverviewPrompt(event.currentTarget, event.clientX, event.clientY);
+              }}
+              onPointerLeave={(event) => { delete event.currentTarget.dataset.cursor; }}
+              onPointerCancel={(event) => { delete event.currentTarget.dataset.cursor; }}
+              onClick={(event) => {
+                delete event.currentTarget.dataset.cursor;
+                setActiveForm("first-session");
+              }}
+              aria-label="Выбрать онлайн-сессию"
+            >
+              <span aria-hidden="true"><b>Выбрать</b></span>
+            </button>
+          </div>
           <div className="price-list">
             {formats.map((format) => (
               <article className="format-option" key={format.key}>
@@ -223,7 +259,11 @@ export default function Home() {
                   className="format-select"
                   type="button"
                   onPointerEnter={(event) => {
-                    if (event.pointerType === "mouse") positionFormatPrompt(event.currentTarget, event.clientX, event.clientY);
+                    if (event.pointerType === "mouse") {
+                      const overview = event.currentTarget.closest(".formats-inner")?.querySelector<HTMLButtonElement>(".formats-overview-select");
+                      if (overview) delete overview.dataset.cursor;
+                      positionFormatPrompt(event.currentTarget, event.clientX, event.clientY);
+                    }
                   }}
                   onPointerMove={(event) => {
                     if (event.pointerType === "mouse") positionFormatPrompt(event.currentTarget, event.clientX, event.clientY);
