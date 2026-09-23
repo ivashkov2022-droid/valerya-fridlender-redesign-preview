@@ -75,8 +75,10 @@ test("adds mobile breathing room only around the lead-form consent and submit ac
 test("activates one mobile format on scroll while keeping the entire row clickable", async () => {
   const [page, css] = await Promise.all([read("app/page.tsx"), read("app/globals.css")]);
 
-  assert.match(page, /new IntersectionObserver/);
   assert.match(page, /window\.matchMedia\("\(max-width: 560px\)"\)/);
+  assert.match(page, /window\.requestAnimationFrame\(updateMobileFormat\)/);
+  assert.match(page, /window\.addEventListener\("scroll", scheduleMobileFormatUpdate, \{ passive: true \}\)/);
+  assert.match(page, /visibleOptions\.reduce/);
   assert.match(page, /className=\{`format-option\$\{activeMobileFormat === format\.key \? " is-scroll-active" : ""\}`\}/);
   assert.match(page, /data-format-key=\{format\.key\}/);
   assert.match(css, /\.format-select\s*\{[^}]*position:\s*absolute\s*;[^}]*inset:\s*0\s*;/);

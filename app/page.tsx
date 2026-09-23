@@ -121,39 +121,56 @@ export default function Home() {
     if (!list) return;
 
     const mobileQuery = window.matchMedia("(max-width: 560px)");
-    let observer: IntersectionObserver | null = null;
+    const options = [...list.querySelectorAll<HTMLElement>(".format-option")];
+    let frameId: number | null = null;
+
+    const updateMobileFormat = () => {
+      frameId = null;
+      if (!mobileQuery.matches) return;
+
+      const viewportCenter = window.innerHeight / 2;
+      const visibleOptions = options.filter((option) => {
+        const bounds = option.getBoundingClientRect();
+        return bounds.bottom > 0 && bounds.top < window.innerHeight;
+      });
+      if (visibleOptions.length === 0) return;
+
+      const centered = visibleOptions.reduce((closest, option) => {
+        const closestBounds = closest.getBoundingClientRect();
+        const optionBounds = option.getBoundingClientRect();
+        const closestDistance = Math.abs(closestBounds.top + closestBounds.height / 2 - viewportCenter);
+        const optionDistance = Math.abs(optionBounds.top + optionBounds.height / 2 - viewportCenter);
+        return optionDistance < closestDistance ? option : closest;
+      });
+      const formatKey = centered.getAttribute("data-format-key") as LeadFormKey | null;
+      if (formatKey) setActiveMobileFormat((current) => current === formatKey ? current : formatKey);
+    };
+
+    const scheduleMobileFormatUpdate = () => {
+      if (frameId === null) frameId = window.requestAnimationFrame(updateMobileFormat);
+    };
 
     const watchMobileFormats = () => {
-      observer?.disconnect();
-      observer = null;
-
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+        frameId = null;
+      }
       if (!mobileQuery.matches) {
         setActiveMobileFormat(null);
         return;
       }
-
-      const options = [...list.querySelectorAll<HTMLElement>(".format-option")];
       setActiveMobileFormat((current) => current ?? formats[0].key);
-      observer = new IntersectionObserver((entries) => {
-        const centered = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((left, right) => {
-            const center = window.innerHeight / 2;
-            const leftDistance = Math.abs(left.boundingClientRect.top + left.boundingClientRect.height / 2 - center);
-            const rightDistance = Math.abs(right.boundingClientRect.top + right.boundingClientRect.height / 2 - center);
-            return leftDistance - rightDistance;
-          })[0];
-        const formatKey = centered?.target.getAttribute("data-format-key") as LeadFormKey | null;
-        if (formatKey) setActiveMobileFormat(formatKey);
-      }, { rootMargin: "-36% 0px -36% 0px", threshold: 0.01 });
-
-      options.forEach((option) => observer?.observe(option));
+      scheduleMobileFormatUpdate();
     };
 
     watchMobileFormats();
+    window.addEventListener("scroll", scheduleMobileFormatUpdate, { passive: true });
+    window.addEventListener("resize", scheduleMobileFormatUpdate);
     mobileQuery.addEventListener("change", watchMobileFormats);
     return () => {
-      observer?.disconnect();
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+      window.removeEventListener("scroll", scheduleMobileFormatUpdate);
+      window.removeEventListener("resize", scheduleMobileFormatUpdate);
       mobileQuery.removeEventListener("change", watchMobileFormats);
     };
   }, []);
