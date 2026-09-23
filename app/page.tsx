@@ -111,10 +111,20 @@ export default function Home() {
   const [activeMethod, setActiveMethod] = useState<MethodKey | null>(null);
   const [activeMobileFormat, setActiveMobileFormat] = useState<LeadFormKey | null>(null);
   const [activeFaq, setActiveFaq] = useState(0);
+  const pageRoot = useRef<HTMLElement>(null);
   const formatsList = useRef<HTMLDivElement>(null);
   const closeForm = useCallback(() => setActiveForm(null), []);
   const closeService = useCallback(() => setActiveService(null), []);
   const closeMethod = useCallback(() => setActiveMethod(null), []);
+
+  useEffect(() => {
+    const marker = new URLSearchParams(window.location.search).get("marker");
+    const root = pageRoot.current;
+    if (!root || (marker !== "twig-a" && marker !== "twig-b" && marker !== "twig-c")) return;
+
+    root.dataset.markerPreview = marker;
+    return () => { delete root.dataset.markerPreview; };
+  }, []);
 
   useEffect(() => {
     const list = formatsList.current;
@@ -176,7 +186,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
+    <main ref={pageRoot}>
       <div className="info-bar">
         <a href="tel:+79111284444">+7 911 128-44-44</a>
         <span>Онлайн по всему миру</span>
@@ -352,7 +362,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="faq-section section-shell">
+      <section className="faq-section section-shell" id="faq">
         <div className="faq-title"><p className="eyebrow">Вопросы</p><h2>До первой встречи</h2></div>
         <div className="faq-list">
           {faqs.map(([question, answer], index) => (

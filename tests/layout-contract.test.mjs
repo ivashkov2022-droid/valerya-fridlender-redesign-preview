@@ -92,3 +92,21 @@ test("groups the FAQ so opening a question closes the previous one", async () =>
   assert.match(page, /<details key=\{question\} name="before-first-session" open=\{activeFaq === index\}>/);
   assert.match(page, /event\.preventDefault\(\); setActiveFaq\(index\)/);
 });
+
+test("offers three transparent twig previews without changing the default eyebrow rule", async () => {
+  const [page, css] = await Promise.all([read("app/page.tsx"), read("app/globals.css")]);
+
+  assert.match(page, /new URLSearchParams\(window\.location\.search\)\.get\("marker"\)/);
+  assert.match(page, /marker !== "twig-a" && marker !== "twig-b" && marker !== "twig-c"/);
+  assert.match(page, /root\.dataset\.markerPreview = marker/);
+  assert.match(page, /<main ref=\{pageRoot\}>/);
+  assert.match(page, /<section className="faq-section section-shell" id="faq">/);
+
+  assert.match(css, /\.eyebrow::before\s*\{[^}]*width:\s*32px\s*;[^}]*height:\s*1px\s*;[^}]*margin-right:\s*11px\s*;[^}]*background:\s*currentColor\s*;[^}]*opacity:\s*0\.5\s*;/);
+  assert.match(css, /main\[data-marker-preview\] \.eyebrow::before\s*\{[^}]*height:\s*12px\s*;[^}]*mask:\s*var\(--eyebrow-marker-mask\)/);
+  for (const variant of ["twig-a", "twig-b", "twig-c"]) {
+    assert.match(css, new RegExp(`main\\[data-marker-preview="${variant}"\\]`));
+  }
+  assert.match(css, /stroke-width%3D'1'/);
+  assert.doesNotMatch(css, /main\[data-marker-preview[^}]*background-color\s*:/);
+});

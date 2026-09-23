@@ -309,6 +309,20 @@ h1, h2, h3, p { margin-top: 0; }
   text-transform: uppercase;
 }
 .eyebrow::before { content: ""; display: inline-block; width: 32px; height: 1px; margin-right: 11px; vertical-align: middle; background: currentColor; opacity: 0.5; }
+main[data-marker-preview] .eyebrow::before {
+  height: 12px;
+  -webkit-mask: var(--eyebrow-marker-mask) center / 32px 12px no-repeat;
+  mask: var(--eyebrow-marker-mask) center / 32px 12px no-repeat;
+}
+main[data-marker-preview="twig-a"] {
+  --eyebrow-marker-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2032%2012'%20fill%3D'none'%20stroke%3D'white'%20stroke-width%3D'1'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M.75%207.25%20C8.2%207.25%2015.3%207.1%2022.05%206.75%20C25.45%206.58%2028.55%206.05%2031.25%205.35'%2F%3E%3Cpath%20d%3D'M20.35%206.85%20C21.2%204.35%2023.15%203.15%2025.55%203.35%20C24.65%205.45%2022.9%206.62%2020.35%206.85'%2F%3E%3C%2Fsvg%3E");
+}
+main[data-marker-preview="twig-b"] {
+  --eyebrow-marker-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2032%2012'%20fill%3D'none'%20stroke%3D'white'%20stroke-width%3D'1'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M.75%207.45%20C9%207.45%2016.25%207.15%2022.2%206.55%20C26.15%206.15%2029%205.2%2031.25%204.15'%2F%3E%3Cpath%20d%3D'M22.1%206.56%20C21.05%204.1%2019.15%203.1%2016.95%203.55%20C17.75%205.6%2019.55%206.7%2022.1%206.56'%2F%3E%3C%2Fsvg%3E");
+}
+main[data-marker-preview="twig-c"] {
+  --eyebrow-marker-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2032%2012'%20fill%3D'none'%20stroke%3D'white'%20stroke-width%3D'1'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M.75%207.45%20C10%207.45%2018%207.25%2031.25%206.45'%2F%3E%3Cpath%20d%3D'M20.15%207.08%20C20.85%205.05%2022.35%204.05%2024.2%204.15%20C23.5%205.85%2022.15%206.85%2020.15%207.08'%2F%3E%3Cpath%20d%3D'M24.1%206.86%20C25.2%208.7%2027%209.35%2028.85%208.65%20C27.75%207%2026.15%206.45%2024.1%206.86'%2F%3E%3C%2Fsvg%3E");
+}
 .intro-copy h2 {
   margin-bottom: 25px;
   font-family: "Cormorant Garamond", Georgia, serif;
