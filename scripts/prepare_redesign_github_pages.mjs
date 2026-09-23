@@ -9,6 +9,15 @@ await rm(target, { recursive: true, force: true });
 await mkdir(target, { recursive: true });
 await cp(source, target, { recursive: true });
 
+const cssDirectory = path.join(target, "_next", "static", "css");
+for (const filename of await readdir(cssDirectory)) {
+  if (!filename.endsWith(".css")) continue;
+  const file = path.join(cssDirectory, filename);
+  const before = await readFile(file, "utf8");
+  const after = before.replace(/url\((['"]?)\/_next\/static\/media\//g, "url($1../media/");
+  if (after !== before) await writeFile(file, after, "utf8");
+}
+
 const rewriteLocalPaths = (html) => html
   .replace(/href="\/privacy-policy(?=([#"]))/gi, 'href="privacy-policy.html')
   .replace(/href="\/personal-data-consent(?=([#"]))/gi, 'href="personal-data-consent.html')
@@ -17,9 +26,7 @@ const rewriteLocalPaths = (html) => html
 let home = await readFile(renderedHome, "utf8");
 home = home
   .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
-  .replace(/<link\b[^>]*rel="modulepreload"[^>]*\/?\s*>/gi, "")
-  .replace(/<aside class="font-lab"[\s\S]*?<\/aside>/i, '<aside class="font-lab" aria-label="Примерочная шрифтов"><button class="font-lab-trigger" type="button" aria-expanded="false"><span aria-hidden="true">Aa</span> Шрифты</button></aside>')
-  .replace("</body>", '<script src="js/font-lab-static.js"></script></body>');
+  .replace(/<link\b[^>]*rel="modulepreload"[^>]*\/?\s*>/gi, "");
 home = rewriteLocalPaths(home);
 await writeFile(path.join(target, "index.html"), home, "utf8");
 

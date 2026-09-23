@@ -1,4 +1,4 @@
-import { access, cp, mkdir, rm, writeFile } from "node:fs/promises";
+import { access, cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const source = path.resolve(process.argv[2] || "dist/client");
@@ -13,6 +13,15 @@ if (!response.ok) {
 await rm(target, { recursive: true, force: true });
 await mkdir(target, { recursive: true });
 await cp(source, target, { recursive: true });
+
+const cssDirectory = path.join(target, "_next", "static", "css");
+for (const filename of await readdir(cssDirectory)) {
+  if (!filename.endsWith(".css")) continue;
+  const file = path.join(cssDirectory, filename);
+  const before = await readFile(file, "utf8");
+  const after = before.replace(/url\((['"]?)\/_next\/static\/media\//g, "url($1../media/");
+  if (after !== before) await writeFile(file, after, "utf8");
+}
 
 let home = await response.text();
 home = home

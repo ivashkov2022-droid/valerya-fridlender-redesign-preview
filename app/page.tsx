@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import FontLab from "./font-lab";
 import { LeadFormKey, LeadModal, MethodDrawer, MethodKey, ServiceKey, ServiceModal } from "./lead-funnels";
 
 const trustPoints = [
@@ -229,7 +228,7 @@ export default function Home() {
         <div className="formats-inner section-shell">
           <div className="formats-heading">
             <p className="eyebrow eyebrow-light">Форматы и стоимость</p>
-            <h2>Онлайн<span className="formats-hyphen">-</span>сессии</h2>
+            <h2><span className="formats-title-line">Онлайн-</span><span className="formats-title-line">сессии</span></h2>
             <p>Разовая консультация или пакет встреч для последовательной работы с запросом.</p>
             <button
               className="formats-overview-select"
@@ -352,7 +351,6 @@ export default function Home() {
       {activeMethod && <MethodDrawer methodKey={activeMethod} onClose={closeMethod} onDiscuss={(formKey) => { setActiveMethod(null); setActiveForm(formKey); }} />}
       {activeService && <ServiceModal serviceKey={activeService} onClose={closeService} onContact={(formKey) => { setActiveService(null); setActiveForm(formKey); }} />}
       {activeForm && <LeadModal formKey={activeForm} onClose={closeForm} />}
-      <FontLab />
     </main>
   );
 }
